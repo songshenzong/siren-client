@@ -300,23 +300,15 @@ class StatisticProtocol
 
 if (PHP_SAPI == 'cli' && isset($argv[0]) && $argv[0] == basename(__FILE__)) {
     date_default_timezone_set('Asia/Chongqing');
-    StatisticClient::setAddress('10.21.7.47', 55656);
-    StatisticClient::tick('TestModule2', 'TestApi2');
-    // usleep(rand(10000, 600000));
-    $code = rand(300, 400);
-    $msg  = str_repeat('我爱你中国啊', 120);
-
-
+    StatisticClient::setAddress('127.0.0.1', 55656);
+    StatisticClient::tick('TestModule', 'TestApi');
     var_export(StatisticClient::success());
-
-    var_export(StatisticClient:: error($code, $msg, '可以有很多个参数'));;
-
+    var_export(StatisticClient:: error(200, 'Parameter1', 'Parameter2'));;
     try {
-        throw new Exception('New Exception');
+        throw new Exception('Exception Message');
     } catch (Exception $exception) {
         var_export(StatisticClient:: exception($exception));
     }
-
 }
 
 
