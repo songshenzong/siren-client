@@ -19,7 +19,7 @@ composer require songshenzong/statistic-client
   
   StatisticClient::success();
   
-  StatisticClient:: error(200, 'Parameter1', 'Parameter2');
+  StatisticClient::error(200, 'Parameter1', 'Parameter2');
   
   try {
           throw new Exception('Exception Message');
@@ -30,7 +30,7 @@ composer require songshenzong/statistic-client
 
 
 
-### Laravel 5.x:
+## Laravel 5.x
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php
