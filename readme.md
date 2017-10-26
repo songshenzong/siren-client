@@ -10,13 +10,7 @@ Require this package with composer:
 composer require songshenzong/statistic-client
 ```
 
-After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
-### Laravel 5.x:
-
-```php
-Songshenzong\StatisticClient\ServiceProvider::class,
-```
 ## Use
 ```php
   StatisticClient::setAddress('127.0.0.1', 55656);
@@ -33,6 +27,16 @@ Songshenzong\StatisticClient\ServiceProvider::class,
           StatisticClient:: exception($exception);
   }
 ```
+
+
+
+### Laravel 5.x:
+After updating composer, add the ServiceProvider to the providers array in `config/app.php`
+
+```php
+Songshenzong\StatisticClient\ServiceProvider::class,
+```
+
 
 ## Documentation
 
