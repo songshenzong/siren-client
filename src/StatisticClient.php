@@ -310,5 +310,3 @@ if (PHP_SAPI == 'cli' && isset($argv[0]) && $argv[0] == basename(__FILE__)) {
         var_export(StatisticClient:: exception($exception));
     }
 }
-
-
