@@ -176,16 +176,15 @@ if (PHP_SAPI == 'cli' && isset($argv[0]) && $argv[0] == basename(__FILE__)) {
 
     // Set the server and port, the default value is 127.0.0.1:55656
     StatisticClient::setAddress('127.0.0.1', 55656);
-    
+
     // Module and interface consumption time statistics
     StatisticClient::tick('User', 'destroyToken');
 
-    // If action failed
-    if (User::destroyToken(1)) {
-        StatisticClient::success('User', 'destroyToken');
-    } else {
-        StatisticClient::error('User', 'destroyToken', 200, 'User 1 token failed to destroy');
-    }
+
+    StatisticClient::success('User', 'destroyToken');
+
+    StatisticClient::error('User', 'destroyToken', 200, 'User 1 token failed to destroy');
+
 
     // If Exception
     try {
