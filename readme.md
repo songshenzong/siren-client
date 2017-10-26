@@ -13,19 +13,28 @@ composer require songshenzong/statistic-client
 
 ## Use
 ```php
-  StatisticClient::setAddress('127.0.0.1', 55656);
-  
-  StatisticClient::tick('TestModule', 'TestApi');
-  
-  StatisticClient::success();
-  
-  StatisticClient::error(200, 'Parameter1', 'Parameter2');
-  
-  try {
-          throw new Exception('Exception Message');
-  } catch (Exception $exception) {
-          StatisticClient:: exception($exception);
-  }
+    // Set the server and port, if not, the default value is 127.0.0.1:55656
+    StatisticClient::setAddress('127.0.0.1', 55656);
+    
+    // Module and interface consumption time statistics
+    StatisticClient::tick('User', 'destroyToken');
+
+
+
+    // If action failed
+    if (User::destroyToken(1)) {
+        StatisticClient::success('User', 'destroyToken');
+    } else {
+        StatisticClient::error('User', 'destroyToken', 200, 'User 1 token failed to destroy');
+    }
+
+
+    // If Exception
+    try {
+        throw new Exception('Message');
+    } catch (Exception $exception) {
+        StatisticClient:: exception('System', 'Exception', $exception);
+    }
 ```
 
 
