@@ -1,0 +1,31 @@
+{
+  "name": "songshenzong/statistic-client",
+  "description": "Statistic Client",
+  "keywords": [
+    "Statistic",
+    "response"
+  ],
+  "license": "MIT",
+  "homepage": "http://songshenzong.com",
+  "support": {
+    "issues": "https://github.com/songshenzong/statistic-client/issues",
+    "source": "https://github.com/songshenzong/statistic-client"
+  },
+  "authors": [
+    {
+      "name": "Connor Niu",
+      "email": "connor.niu@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Songshenzong\\StatisticClient\\": "src/"
+    },
+    "files": [
+      "src/Helpers.php"
+    ]
+  }
+}
