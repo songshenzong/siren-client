@@ -17,7 +17,22 @@ After updating composer, add the ServiceProvider to the providers array in `conf
 ```php
 Songshenzong\StatisticClient\ServiceProvider::class,
 ```
-
+## Use
+```php
+  StatisticClient::setAddress('127.0.0.1', 55656);
+  
+  StatisticClient::tick('TestModule', 'TestApi');
+  
+  StatisticClient::success();
+  
+  StatisticClient:: error(200, 'Parameter1', 'Parameter2');
+  
+  try {
+          throw new Exception('Exception Message');
+  } catch (Exception $exception) {
+          StatisticClient:: exception($exception);
+  }
+```
 
 ## Documentation
 
