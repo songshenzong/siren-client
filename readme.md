@@ -25,11 +25,11 @@ composer require songshenzong/statistic-client
     if (User::destroyToken(1)) {
         StatisticClient::success('User', 'destroyToken');
     } else {
-        StatisticClient::error('User', 'destroyToken', 200, 'User 1 token failed to destroy');
+        StatisticClient::error('User', 'destroyToken', 200, 'User 1 token destroy failed');
     }
 
 
-    // If Exception
+    // Handle Exception
     try {
         throw new Exception('Message');
     } catch (Exception $exception) {
