@@ -2,6 +2,7 @@
 
 namespace Songshenzong\StatisticClient;
 
+
 /**
  *
  * Structural statisticProtocol

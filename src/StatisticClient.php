@@ -98,7 +98,6 @@ class StatisticClient
         $cost_time = microtime(true) - $time_start;
 
         $bin_data = StatisticProtocol::encode($module, $interface, $cost_time, $success, $code, $msg);
-
         return self::sendData($report_address, $bin_data);
     }
 
@@ -127,12 +126,13 @@ class StatisticClient
      */
     public static function error($module, $interface, $code, $message)
     {
-
-        $result = false;
-        foreach (debug_backtrace() as $key => $bt) {
-            $information = "#$key  $code:$message called at [{$bt['file']}:{$bt['line']}]";
-            $result      = self::report($module, $interface, 0, $code, $information);
+        $debug = debug_backtrace();
+        if (isset($debug[0]['file']) && isset($debug[0]['line'])) {
+            $information = "$code:$message called at [{$debug[0]['file']}:{{$debug[0]['line']}]";
+        } else {
+            $information = '';
         }
+        $result = self::report($module, $interface, 0, $code, $information);
         return $result;
     }
 
@@ -194,3 +194,7 @@ if (PHP_SAPI == 'cli' && isset($argv[0]) && $argv[0] == basename(__FILE__)) {
     }
 
 }
+
+
+
+
