@@ -139,11 +139,7 @@ class StatisticClient
         $file = self::$backtrace[0]['file'] ?? 'file';
         $line = self::$backtrace[0]['line'] ?? 'line';
 
-        if (isset($debug[0]['file']) && isset($debug[0]['line'])) {
-            $information = "$code:$message called at [{$file}:{{$line}]";
-        } else {
-            $information = '';
-        }
+        $information = "$code:$message called at [{$file}:{{$line}]";
 
         return self::report($module, $interface, 0, $code, $information);
     }
