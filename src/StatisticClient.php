@@ -139,7 +139,7 @@ class StatisticClient
         $file = self::$backtrace[0]['file'] ?? 'file';
         $line = self::$backtrace[0]['line'] ?? 'line';
 
-        $information = "$code:$message called at [$file:$line]";
+        $information = "$code:$message [$file:$line]";
 
         return self::report($module, $interface, 0, $code, $information);
     }
@@ -164,7 +164,7 @@ class StatisticClient
      */
     public static function exception($module, $interface, Exception $exception)
     {
-        $message = "{$exception->getMessage()} called at [{$exception->getFile()}:{$exception->getLine()}]";
+        $message = "{$exception->getMessage()} [{$exception->getFile()}:{$exception->getLine()}]";
         return self::report($module, $interface, 0, $exception->getCode(), $message);
     }
 
