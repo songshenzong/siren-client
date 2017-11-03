@@ -136,8 +136,8 @@ class StatisticClient
             self::$backtrace = debug_backtrace();
         }
 
-        $file = self::$backtrace[0]['file'] ?? 'file';
-        $line = self::$backtrace[0]['line'] ?? 'line';
+        $file = isset(self::$backtrace[0]['file']) ? self::$backtrace[0]['file'] : 'file';
+        $line = isset(self::$backtrace[0]['line']) ? self::$backtrace[0]['line'] : 'line';
 
         $information = "$message [$file:$line]";
 
