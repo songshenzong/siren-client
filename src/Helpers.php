@@ -43,6 +43,7 @@ if (!function_exists('statisticError')) {
      */
     function statisticError($module, $interface, $code, $message)
     {
+        \Songshenzong\StatisticClient\StatisticClient::backtrace(debug_backtrace());
         return \Songshenzong\StatisticClient\StatisticClient::error($module, $interface, $code, $message);
     }
 }

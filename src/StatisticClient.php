@@ -45,6 +45,12 @@ class StatisticClient
 
 
     /**
+     * @var array
+     */
+    protected static $backtrace;
+
+
+    /**
      * 模块接口上报消耗时间记时
      *
      * @param string $module
@@ -126,16 +132,32 @@ class StatisticClient
      */
     public static function error($module, $interface, $code, $message)
     {
-        $debug = debug_backtrace();
+        if (self::$backtrace === null) {
+            self::$backtrace = debug_backtrace();
+        }
+
+        $file = self::$backtrace[0]['file'] ?? 'file';
+        $line = self::$backtrace[0]['line'] ?? 'line';
+
         if (isset($debug[0]['file']) && isset($debug[0]['line'])) {
-            $information = "$code:$message called at [{$debug[0]['file']}:{{$debug[0]['line']}]";
+            $information = "$code:$message called at [{$file}:{{$line}]";
         } else {
             $information = '';
         }
-        $result = self::report($module, $interface, 0, $code, $information);
-        return $result;
+
+        return self::report($module, $interface, 0, $code, $information);
     }
 
+
+    /**
+     * Set backtrace
+     *
+     * @param $backtrace
+     */
+    public static function backtrace($backtrace)
+    {
+        self::$backtrace = $backtrace;
+    }
 
     /**
      * @param           $module
