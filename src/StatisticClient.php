@@ -139,7 +139,7 @@ class StatisticClient
         $file = self::$backtrace[0]['file'] ?? 'file';
         $line = self::$backtrace[0]['line'] ?? 'line';
 
-        $information = "$code:$message [$file:$line]";
+        $information = "$message [$file:$line]";
 
         return self::report($module, $interface, 0, $code, $information);
     }
