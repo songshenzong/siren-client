@@ -3,7 +3,8 @@
   "description": "Statistic Client",
   "keywords": [
     "Statistic",
-    "response"
+    "UDP",
+    "Log"
   ],
   "license": "MIT",
   "homepage": "http://songshenzong.com",
