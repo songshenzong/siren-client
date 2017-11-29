@@ -15,6 +15,20 @@ if (!function_exists('statisticSetAddress')) {
 }
 
 
+if (!function_exists('statisticSetToken')) {
+    /**
+     * Get the instance
+     *
+     *
+     * @param     $token string
+     */
+    function statisticSetToken($token)
+    {
+        \Songshenzong\StatisticClient\StatisticClient::setToken($token);
+    }
+}
+
+
 if (!function_exists('statisticTick')) {
     /**
      * Get the instance
@@ -38,13 +52,14 @@ if (!function_exists('statisticError')) {
      * @param       $interface
      * @param       $code
      * @param       $message
+     * @param       $alert
      *
      * @return bool
      */
-    function statisticError($module, $interface, $code, $message)
+    function statisticError($module, $interface, $code, $message, $alert = -1)
     {
         \Songshenzong\StatisticClient\StatisticClient::backtrace(debug_backtrace());
-        return \Songshenzong\StatisticClient\StatisticClient::error($module, $interface, $code, $message);
+        return \Songshenzong\StatisticClient\StatisticClient::error($module, $interface, $code, $message, $alert);
     }
 }
 
@@ -56,12 +71,13 @@ if (!function_exists('statisticException')) {
      * @param           $module
      * @param           $interface
      * @param Exception $exception
+     * @param           $alert
      *
      * @return bool
      */
-    function statisticException($module, $interface, Exception $exception)
+    function statisticException($module, $interface, Exception $exception, $alert = -1)
     {
-        return \Songshenzong\StatisticClient\StatisticClient::exception($module, $interface, $exception);
+        return \Songshenzong\StatisticClient\StatisticClient::exception($module, $interface, $exception, $alert);
     }
 }
 

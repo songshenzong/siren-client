@@ -28,5 +28,12 @@
     "files": [
       "src/Helpers.php"
     ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Songshenzong\\StatisticClient\\ServiceProvider"
+      ]
+    }
   }
 }

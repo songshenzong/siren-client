@@ -47,7 +47,169 @@ class StatisticClient
     /**
      * @var array
      */
-    protected static $backtrace;
+    protected static $backtrace = [];
+
+
+    /**
+     * @var string
+     */
+    protected static $token = '';
+
+    /**
+     * @var string
+     */
+    protected static $environment = '';
+
+    /**
+     * @var string
+     */
+    protected static $file = '';
+
+    /**
+     * @var string
+     */
+    protected static $line = 0;
+
+
+    /**
+     * 包头长度
+     *
+     * @var integer
+     */
+    const PACKAGE_FIXED_LENGTH = 22;
+
+    /**
+     * udp 包最大长度
+     *
+     * @var integer
+     */
+    const MAX_UDP_PACKAGE_SIZE = 65507;
+
+    /**
+     * char类型能保存的最大数值
+     *
+     * @var integer
+     */
+    const MAX_CHAR_VALUE = 255;
+
+    /**
+     *  unsigned short 能保存的最大数值
+     *
+     * @var integer
+     */
+    const MAX_UNSIGNED_SHORT_VALUE = 65535;
+
+    /**
+     * 编码
+     *
+     * @param        $token
+     * @param        $module
+     * @param        $interface
+     * @param        $cost_time
+     * @param        $success
+     * @param int    $code
+     * @param string $msg
+     * @param int    $alert
+     *
+     * @return string
+     */
+    public static function encode($token, $module, $interface, $cost_time, $success, $code = 0, $msg = '', $alert)
+    {
+        // 防止模块名过长
+        if (strlen($module) > self::MAX_CHAR_VALUE) {
+            $module = substr($module, 0, self::MAX_CHAR_VALUE);
+        }
+
+        // 防止接口名过长
+        if (strlen($interface) > self::MAX_CHAR_VALUE) {
+            $interface = substr($interface, 0, self::MAX_CHAR_VALUE);
+        }
+
+        // 防止msg过长
+        $token_length          = strlen($token);
+        $file_length           = strlen(self::$file);
+        $module_name_length    = strlen($module);
+        $interface_name_length = strlen($interface);
+        $available_size        = self::MAX_UDP_PACKAGE_SIZE
+                                 - self::PACKAGE_FIXED_LENGTH
+                                 - $token_length
+                                 - $file_length
+                                 - $module_name_length
+                                 - $interface_name_length;
+
+
+        if (strlen($msg) > $available_size) {
+            // 9184
+            $msg = substr($msg, 0, $available_size);
+        }
+
+        $msg_length = strlen($msg);
+
+        // 打包
+        return pack('CCCfCNnNcCn',
+                    $token_length,
+                    $module_name_length,
+                    $interface_name_length,
+                    $cost_time,
+                    $success ? 1 : 0,
+                    $code,
+                    $msg_length,
+                    time(),
+                    $alert,
+                    self::$line,
+                    $file_length
+               ) . $token . $module . $interface . $msg . self::$file;
+    }
+
+    /**
+     * 解包
+     *
+     * @param string $bin_data
+     *
+     * @return array
+     */
+    public static function decode($bin_data)
+    {
+        // 解包
+        $data = unpack("Ctoken_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len", $bin_data);
+
+        $token = substr($bin_data, self::PACKAGE_FIXED_LENGTH, $data['token_length']);
+
+        $module = substr($bin_data, self::PACKAGE_FIXED_LENGTH
+                                    + $data['token_length'], $data['module_name_len']);
+
+        $interface = substr($bin_data, self::PACKAGE_FIXED_LENGTH
+                                       + $data['token_length']
+                                       + $data['module_name_len'], $data['interface_name_len']);
+
+
+        $msg = substr($bin_data, self::PACKAGE_FIXED_LENGTH
+                                 + $data['token_length']
+                                 + $data['module_name_len']
+                                 + $data['interface_name_len'], $data['msg_len']);
+
+
+        $file = substr($bin_data, self::PACKAGE_FIXED_LENGTH
+                                  + $data['token_length']
+                                  + $data['module_name_len']
+                                  + $data['interface_name_len']
+                                  + $data['msg_len'], $data['file_len']);
+
+
+        return [
+            'token'     => $token,
+            'module'    => $module,
+            'interface' => $interface,
+            'cost_time' => $data['cost_time'],
+            'success'   => $data['success'],
+            'time'      => $data['time'],
+            'code'      => $data['code'],
+            'alert'     => $data['alert'],
+            'msg'       => $msg,
+            'file'      => $file,
+            'line'      => $data['line'],
+        ];
+    }
 
 
     /**
@@ -74,6 +236,13 @@ class StatisticClient
         self::$port = $port;
     }
 
+    /**
+     * @param $token string
+     */
+    public static function setToken($token)
+    {
+        self::$token = $token;
+    }
 
     /**
      * 上报统计数据
@@ -82,13 +251,14 @@ class StatisticClient
      * @param string $interface
      * @param bool   $success
      * @param int    $code
-     * @param string $msg
-     * @param string $report_address
+     * @param string $message
+     * @param int    $alert
      *
      * @return boolean
      */
-    public static function report($module, $interface, $success, $code, $msg, $report_address = '')
+    public static function report($module, $interface, $success, $code, $message, $alert = -1)
     {
+        $report_address = 'udp://' . self::$ip . ':' . self::$port;
         $report_address = $report_address ? $report_address : 'udp://' . self::$ip . ':' . self::$port;
 
         if (isset(self::$timeMap[$module][$interface]) && self::$timeMap[$module][$interface] > 0) {
@@ -103,7 +273,8 @@ class StatisticClient
 
         $cost_time = microtime(true) - $time_start;
 
-        $bin_data = StatisticProtocol::encode($module, $interface, $cost_time, $success, $code, $msg);
+
+        $bin_data = self::encode(self::$token, $module, $interface, $cost_time, $success, $code, $message, $alert);
         return self::sendData($report_address, $bin_data);
     }
 
@@ -127,21 +298,26 @@ class StatisticClient
      * @param       $interface
      * @param       $code
      * @param       $message
+     * @param       $alert
      *
      * @return bool
      */
-    public static function error($module, $interface, $code, $message)
+    public static function error($module, $interface, $code, $message, $alert)
     {
         if (self::$backtrace === null) {
             self::$backtrace = debug_backtrace();
         }
 
-        $file = isset(self::$backtrace[0]['file']) ? self::$backtrace[0]['file'] : 'file';
-        $line = isset(self::$backtrace[0]['line']) ? self::$backtrace[0]['line'] : 'line';
+        self::$file = isset(self::$backtrace[0]['file'])
+            ? self::$backtrace[0]['file']
+            : 'file';
 
-        $information = "$message [$file:$line]";
+        self::$line = isset(self::$backtrace[0]['line'])
+            ? self::$backtrace[0]['line']
+            : 'line';
 
-        return self::report($module, $interface, 0, $code, $information);
+
+        return self::report($module, $interface, 0, $code, $message, $alert);
     }
 
 
@@ -159,13 +335,15 @@ class StatisticClient
      * @param           $module
      * @param           $interface
      * @param Exception $exception
+     * @param int       $alert
      *
      * @return bool
      */
-    public static function exception($module, $interface, Exception $exception)
+    public static function exception($module, $interface, Exception $exception, $alert = -1)
     {
-        $message = "{$exception->getMessage()} [{$exception->getFile()}:{$exception->getLine()}]";
-        return self::report($module, $interface, 0, $exception->getCode(), $message);
+        self::$file = $exception->getFile();
+        self::$line = $exception->getLine();
+        return self::report($module, $interface, 0, $exception->getCode(), $exception->getMessage(), $alert);
     }
 
 
@@ -201,7 +379,7 @@ if (PHP_SAPI == 'cli' && isset($argv[0]) && $argv[0] == basename(__FILE__)) {
 
     StatisticClient::success('User', 'destroyToken');
 
-    StatisticClient::error('User', 'destroyToken', 200, 'User 1 token failed to destroy');
+    StatisticClient::error('User', 'destroyToken', 200, 'User 1 token failed to destroy', -1);
 
 
     // If Exception
