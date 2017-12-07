@@ -16,9 +16,12 @@ composer require songshenzong/statistic-client
     // Set the server and port, if not, the default value is 127.0.0.1:55656
     StatisticClient::setAddress('127.0.0.1', 55656);
     
+    // System will store log into your project
+    StatisticClient::setToken('Your Token');
+        
+        
     // Module and interface consumption time statistics
     StatisticClient::tick('User', 'destroyToken');
-
 
 
     // If action failed
