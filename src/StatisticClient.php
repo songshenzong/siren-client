@@ -55,10 +55,6 @@ class StatisticClient
      */
     public static $token = '';
 
-    /**
-     * @var string
-     */
-    public static $environment = '';
 
     /**
      * @var string
@@ -256,7 +252,7 @@ class StatisticClient
      *
      * @return boolean
      */
-    public static function report($module, $interface, $success, $code, $message, $alert = -1)
+    public static function report($module, $interface, $success, $code, $message = '', $alert = -1)
     {
         $report_address = 'udp://' . self::$ip . ':' . self::$port;
         $report_address = $report_address ?: 'udp://' . self::$ip . ':' . self::$port;
@@ -283,13 +279,15 @@ class StatisticClient
      * @param        $module
      * @param        $interface
      * @param int    $code
-     * @param string $message
      *
      * @return bool
      */
-    public static function success($module, $interface, $code = 0, $message = '')
+    public static function success($module, $interface, $code = 0)
     {
-        return self::report($module, $interface, 1, $code, $message);
+        self::$backtrace = [];
+        self::$file      = '';
+        self::$line      = '';
+        return self::report($module, $interface, 1, $code);
     }
 
 
@@ -310,11 +308,11 @@ class StatisticClient
 
         self::$file = isset(self::$backtrace[0]['file'])
             ? self::$backtrace[0]['file']
-            : 'file';
+            : '';
 
         self::$line = isset(self::$backtrace[0]['line'])
             ? self::$backtrace[0]['line']
-            : 'line';
+            : '';
 
 
         return self::report($module, $interface, 0, $code, $message, $alert);

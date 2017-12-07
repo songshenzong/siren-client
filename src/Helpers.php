@@ -89,12 +89,11 @@ if (!function_exists('statisticSuccess')) {
      * @param        $module
      * @param        $interface
      * @param int    $code
-     * @param string $msg
      *
      * @return bool
      */
-    function statisticSuccess($module, $interface, $code = 0, $msg = 'success')
+    function statisticSuccess($module, $interface, $code = 0)
     {
-        return \Songshenzong\StatisticClient\StatisticClient::success($module, $interface, $code, $msg);
+        return \Songshenzong\StatisticClient\StatisticClient::success($module, $interface, $code);
     }
 }
