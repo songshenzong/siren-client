@@ -171,7 +171,7 @@ class StatisticClient
     public static function decode($bin_data)
     {
         // 解包
-        $data = unpack("Ctoken_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len", $bin_data);
+        $data = unpack('Ctoken_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
 
         $token = substr($bin_data, self::PACKAGE_FIXED_LENGTH, $data['token_length']);
 
@@ -259,7 +259,7 @@ class StatisticClient
     public static function report($module, $interface, $success, $code, $message, $alert = -1)
     {
         $report_address = 'udp://' . self::$ip . ':' . self::$port;
-        $report_address = $report_address ? $report_address : 'udp://' . self::$ip . ':' . self::$port;
+        $report_address = $report_address ?: 'udp://' . self::$ip . ':' . self::$port;
 
         if (isset(self::$timeMap[$module][$interface]) && self::$timeMap[$module][$interface] > 0) {
             $time_start                         = self::$timeMap[$module][$interface];
@@ -287,7 +287,7 @@ class StatisticClient
      *
      * @return bool
      */
-    public static function success($module, $interface, $code = 0, $message = 'success')
+    public static function success($module, $interface, $code = 0, $message = '')
     {
         return self::report($module, $interface, 1, $code, $message);
     }
@@ -361,17 +361,17 @@ class StatisticClient
         if (!$socket) {
             return false;
         }
-        return stream_socket_sendto($socket, $buffer) == strlen($buffer);
+        return stream_socket_sendto($socket, $buffer) === strlen($buffer);
     }
 
 }
 
 
-if (PHP_SAPI == 'cli' && isset($argv[0]) && $argv[0] == basename(__FILE__)) {
+if (PHP_SAPI === 'cli' && isset($argv[0]) && $argv[0] === basename(__FILE__)) {
     date_default_timezone_set('Asia/Chongqing');
 
     // Set the server and port, the default value is 127.0.0.1:55656
-    StatisticClient::setAddress('127.0.0.1', 55656);
+    StatisticClient::setAddress('127.0.0.1');
 
     // Module and interface consumption time statistics
     StatisticClient::tick('User', 'destroyToken');
