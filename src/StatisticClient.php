@@ -300,7 +300,7 @@ class StatisticClient
      *
      * @return bool
      */
-    public static function error($module, $interface, $code, $message, $alert)
+    public static function error($module, $interface, $code, $message, $alert = 0)
     {
         if (self::$backtrace === null) {
             self::$backtrace = debug_backtrace();
@@ -337,7 +337,7 @@ class StatisticClient
      *
      * @return bool
      */
-    public static function exception($module, $interface, Exception $exception, $alert = -1)
+    public static function exception($module, $interface, Exception $exception, $alert = 0)
     {
         self::$file = $exception->getFile();
         self::$line = $exception->getLine();

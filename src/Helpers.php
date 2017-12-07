@@ -56,7 +56,7 @@ if (!function_exists('statisticError')) {
      *
      * @return bool
      */
-    function statisticError($module, $interface, $code, $message, $alert = -1)
+    function statisticError($module, $interface, $code, $message, $alert = 0)
     {
         \Songshenzong\StatisticClient\StatisticClient::backtrace(debug_backtrace());
         return \Songshenzong\StatisticClient\StatisticClient::error($module, $interface, $code, $message, $alert);
@@ -75,7 +75,7 @@ if (!function_exists('statisticException')) {
      *
      * @return bool
      */
-    function statisticException($module, $interface, Exception $exception, $alert = -1)
+    function statisticException($module, $interface, Exception $exception, $alert = 0)
     {
         return \Songshenzong\StatisticClient\StatisticClient::exception($module, $interface, $exception, $alert);
     }
