@@ -36,39 +36,39 @@ class StatisticClient
      *
      * @var string
      */
-    protected static $ip = '127.0.0.1';
+    public static $ip = '127.0.0.1';
 
     /**
      * @var string
      */
-    protected static $port = 55656;
+    public static $port = 55656;
 
 
     /**
      * @var array
      */
-    protected static $backtrace = [];
+    public static $backtrace = [];
 
 
     /**
      * @var string
      */
-    protected static $token = '';
+    public static $token = '';
 
     /**
      * @var string
      */
-    protected static $environment = '';
+    public static $environment = '';
 
     /**
      * @var string
      */
-    protected static $file = '';
+    public static $file = '';
 
     /**
      * @var string
      */
-    protected static $line = 0;
+    public static $line = 0;
 
 
     /**
