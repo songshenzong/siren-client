@@ -3,8 +3,6 @@
 namespace Songshenzong\StatisticClient;
 
 use Exception;
-use function json_decode;
-use function strlen;
 
 /**
  * This file is part of workerman.
@@ -78,28 +76,28 @@ class StatisticClient
      *
      * @var integer
      */
-    const PACKAGE_FIXED_LENGTH = 23;
+    public const PACKAGE_FIXED_LENGTH = 23;
 
     /**
      * udp 包最大长度
      *
      * @var integer
      */
-    const MAX_UDP_PACKAGE_SIZE = 65507;
+    public const MAX_UDP_PACKAGE_SIZE = 65507;
 
     /**
      * char类型能保存的最大数值
      *
      * @var integer
      */
-    const MAX_CHAR_VALUE = 255;
+    public const MAX_CHAR_VALUE = 255;
 
     /**
      *  unsigned short 能保存的最大数值
      *
      * @var integer
      */
-    const MAX_UNSIGNED_SHORT_VALUE = 65535;
+    public const MAX_UNSIGNED_SHORT_VALUE = 65535;
 
     /**
      * 编码
@@ -115,15 +113,15 @@ class StatisticClient
      *
      * @return string
      */
-    public static function encode($token, $module, $interface, $cost_time, $success, $code = 0, $msg = '', $alert)
+    public static function encode($token, $module, $interface, $cost_time, $success, $code = 0, $msg = '', $alert): string
     {
         // 防止模块名过长
-        if (strlen($module) > self::MAX_CHAR_VALUE) {
+        if (\strlen($module) > self::MAX_CHAR_VALUE) {
             $module = substr($module, 0, self::MAX_CHAR_VALUE);
         }
 
         // 防止接口名过长
-        if (strlen($interface) > self::MAX_CHAR_VALUE) {
+        if (\strlen($interface) > self::MAX_CHAR_VALUE) {
             $interface = substr($interface, 0, self::MAX_CHAR_VALUE);
         }
 
@@ -141,11 +139,11 @@ class StatisticClient
 
 
         // 防止msg过长
-        $token_length          = strlen($token);
-        $request_length        = strlen($request);
-        $file_length           = strlen(self::$file);
-        $module_name_length    = strlen($module);
-        $interface_name_length = strlen($interface);
+        $token_length          = \strlen($token);
+        $request_length        = \strlen($request);
+        $file_length           = \strlen(self::$file);
+        $module_name_length    = \strlen($module);
+        $interface_name_length = \strlen($interface);
         $available_size        = self::MAX_UDP_PACKAGE_SIZE
                                  - self::PACKAGE_FIXED_LENGTH
                                  - $token_length
@@ -155,13 +153,13 @@ class StatisticClient
                                  - $interface_name_length;
 
 
-        if (strlen($msg) > $available_size) {
+        if (\strlen($msg) > $available_size) {
             // 9184
             /** @var string $msg */
             $msg = substr($msg, 0, $available_size);
         }
 
-        $msg_length = strlen($msg);
+        $msg_length = \strlen($msg);
 
         // 打包
         return pack('CCCCfCNnNcCn',
@@ -187,7 +185,7 @@ class StatisticClient
      *
      * @return array
      */
-    public static function decode($bin_data)
+    public static function decode($bin_data): array
     {
         // 解包
         $data = unpack('Ctoken_length/Crequest_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
@@ -199,14 +197,14 @@ class StatisticClient
             , $data['request_length']);
 
         $module = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                    + $data['token_length'],
-                         +$data['request_length'],
+                                    + $data['token_length']
+                                    + $data['request_length'],
                          $data['module_name_len']);
 
         $interface = substr($bin_data, self::PACKAGE_FIXED_LENGTH
                                        + $data['token_length']
-                                       + $data['request_length'],
-                            +$data['module_name_len'],
+                                       + $data['request_length']
+                                       + $data['module_name_len'],
                             $data['interface_name_len']);
 
 
@@ -252,7 +250,7 @@ class StatisticClient
      *
      * @return void
      */
-    public static function tick($module = '', $interface = '')
+    public static function tick($module = '', $interface = ''): void
     {
         self::$timeMap[$module][$interface] = microtime(true);
     }
@@ -262,7 +260,7 @@ class StatisticClient
      * @param $ip
      * @param $port
      */
-    public static function setAddress($ip, $port = 55656)
+    public static function setAddress($ip, $port = 55656): void
     {
         self::$ip   = $ip;
         self::$port = $port;
@@ -271,7 +269,7 @@ class StatisticClient
     /**
      * @param $token string
      */
-    public static function setToken($token)
+    public static function setToken($token): void
     {
         self::$token = $token;
     }
@@ -288,7 +286,7 @@ class StatisticClient
      *
      * @return boolean
      */
-    public static function report($module, $interface, $success, $code, $message = '', $alert = -1)
+    public static function report($module, $interface, $success, $code, $message = '', $alert = -1): bool
     {
         $report_address = 'udp://' . self::$ip . ':' . self::$port;
 
@@ -317,7 +315,7 @@ class StatisticClient
      *
      * @return bool
      */
-    public static function success($module, $interface, $code = 0)
+    public static function success($module, $interface, $code = 0): bool
     {
         self::$backtrace = [];
         self::$file      = '';
@@ -335,19 +333,15 @@ class StatisticClient
      *
      * @return bool
      */
-    public static function error($module, $interface, $code, $message, $alert = 0)
+    public static function error($module, $interface, $code, $message, $alert = 0): bool
     {
         if (self::$backtrace === null) {
             self::$backtrace = debug_backtrace();
         }
 
-        self::$file = isset(self::$backtrace[0]['file'])
-            ? self::$backtrace[0]['file']
-            : '';
+        self::$file = self::$backtrace[0]['file'] ?? '';
 
-        self::$line = isset(self::$backtrace[0]['line'])
-            ? self::$backtrace[0]['line']
-            : '';
+        self::$line = self::$backtrace[0]['line'] ?? '';
 
 
         return self::report($module, $interface, 0, $code, $message, $alert);
@@ -359,7 +353,7 @@ class StatisticClient
      *
      * @param $backtrace
      */
-    public static function backtrace($backtrace)
+    public static function backtrace($backtrace): void
     {
         self::$backtrace = $backtrace;
     }
@@ -372,7 +366,7 @@ class StatisticClient
      *
      * @return bool
      */
-    public static function exception($module, $interface, Exception $exception, $alert = 0)
+    public static function exception($module, $interface, Exception $exception, $alert = 0): bool
     {
         self::$file = $exception->getFile();
         self::$line = $exception->getLine();
@@ -388,13 +382,13 @@ class StatisticClient
      *
      * @return boolean
      */
-    public static function sendData($address, $buffer)
+    public static function sendData($address, $buffer): bool
     {
         $socket = stream_socket_client($address);
         if (!$socket) {
             return false;
         }
-        return stream_socket_sendto($socket, $buffer) === strlen($buffer);
+        return \strlen($buffer) === stream_socket_sendto($socket, $buffer);
     }
 
 }
