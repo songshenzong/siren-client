@@ -3,6 +3,8 @@
 namespace Songshenzong\StatisticClient;
 
 use Exception;
+use function json_decode;
+use function strlen;
 
 /**
  * This file is part of workerman.
@@ -66,13 +68,17 @@ class StatisticClient
      */
     public static $line = 0;
 
+    /**
+     * @var array
+     */
+    public static $request;
 
     /**
      * 包头长度
      *
      * @var integer
      */
-    const PACKAGE_FIXED_LENGTH = 22;
+    const PACKAGE_FIXED_LENGTH = 23;
 
     /**
      * udp 包最大长度
@@ -121,14 +127,29 @@ class StatisticClient
             $interface = substr($interface, 0, self::MAX_CHAR_VALUE);
         }
 
+        // 不成功就搜集现在的请求参数
+        if (!$success) {
+            $request = [
+                'HTTP_HOST'       => $_SERVER['HTTP_HOST'] ?? '',
+                'REQUEST_URI'     => $_SERVER['REQUEST_URI'] ?? '',
+                'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+            ];
+            $request = json_encode($request);
+        } else {
+            $request = '';
+        }
+
+
         // 防止msg过长
         $token_length          = strlen($token);
+        $request_length        = strlen($request);
         $file_length           = strlen(self::$file);
         $module_name_length    = strlen($module);
         $interface_name_length = strlen($interface);
         $available_size        = self::MAX_UDP_PACKAGE_SIZE
                                  - self::PACKAGE_FIXED_LENGTH
                                  - $token_length
+                                 - $request_length
                                  - $file_length
                                  - $module_name_length
                                  - $interface_name_length;
@@ -136,14 +157,16 @@ class StatisticClient
 
         if (strlen($msg) > $available_size) {
             // 9184
+            /** @var string $msg */
             $msg = substr($msg, 0, $available_size);
         }
 
         $msg_length = strlen($msg);
 
         // 打包
-        return pack('CCCfCNnNcCn',
+        return pack('CCCCfCNnNcCn',
                     $token_length,
+                    $request_length,
                     $module_name_length,
                     $interface_name_length,
                     $cost_time,
@@ -154,7 +177,7 @@ class StatisticClient
                     $alert,
                     self::$line,
                     $file_length
-               ) . $token . $module . $interface . $msg . self::$file;
+               ) . $token . $request . $module . $interface . $msg . self::$file;
     }
 
     /**
@@ -167,33 +190,46 @@ class StatisticClient
     public static function decode($bin_data)
     {
         // 解包
-        $data = unpack('Ctoken_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
+        $data = unpack('Ctoken_length/Crequest_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
 
         $token = substr($bin_data, self::PACKAGE_FIXED_LENGTH, $data['token_length']);
 
+        $request = substr($bin_data, self::PACKAGE_FIXED_LENGTH
+                                     + $data['token_length']
+            , $data['request_length']);
+
         $module = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                    + $data['token_length'], $data['module_name_len']);
+                                    + $data['token_length'],
+                         +$data['request_length'],
+                         $data['module_name_len']);
 
         $interface = substr($bin_data, self::PACKAGE_FIXED_LENGTH
                                        + $data['token_length']
-                                       + $data['module_name_len'], $data['interface_name_len']);
+                                       + $data['request_length'],
+                            +$data['module_name_len'],
+                            $data['interface_name_len']);
 
 
         $msg = substr($bin_data, self::PACKAGE_FIXED_LENGTH
                                  + $data['token_length']
+                                 + $data['request_length']
                                  + $data['module_name_len']
-                                 + $data['interface_name_len'], $data['msg_len']);
+                                 + $data['interface_name_len'],
+                      $data['msg_len']);
 
 
         $file = substr($bin_data, self::PACKAGE_FIXED_LENGTH
                                   + $data['token_length']
+                                  + $data['request_length']
                                   + $data['module_name_len']
                                   + $data['interface_name_len']
-                                  + $data['msg_len'], $data['file_len']);
+                                  + $data['msg_len'],
+                       $data['file_len']);
 
 
         return [
             'token'     => $token,
+            'request'   => $request,
             'module'    => $module,
             'interface' => $interface,
             'cost_time' => $data['cost_time'],
@@ -255,7 +291,6 @@ class StatisticClient
     public static function report($module, $interface, $success, $code, $message = '', $alert = -1)
     {
         $report_address = 'udp://' . self::$ip . ':' . self::$port;
-        $report_address = $report_address ?: 'udp://' . self::$ip . ':' . self::$port;
 
         if (isset(self::$timeMap[$module][$interface]) && self::$timeMap[$module][$interface] > 0) {
             $time_start                         = self::$timeMap[$module][$interface];
