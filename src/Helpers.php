@@ -58,7 +58,7 @@ if (!function_exists('statisticError')) {
      */
     function statisticError($module, $interface, $code, $message, $alert = 0)
     {
-        \Songshenzong\StatisticClient\StatisticClient::backtrace(debug_backtrace());
+        \Songshenzong\StatisticClient\StatisticClient::setBacktrace(debug_backtrace());
         return \Songshenzong\StatisticClient\StatisticClient::error($module, $interface, $code, $message, $alert);
     }
 }
@@ -84,16 +84,15 @@ if (!function_exists('statisticException')) {
 
 if (!function_exists('statisticSuccess')) {
     /**
-     * Get the instance
+     * Report the success.
      *
      * @param        $module
      * @param        $interface
-     * @param int    $code
      *
      * @return bool
      */
-    function statisticSuccess($module, $interface, $code = 0)
+    function statisticSuccess($module, $interface)
     {
-        return \Songshenzong\StatisticClient\StatisticClient::success($module, $interface, $code);
+        return \Songshenzong\StatisticClient\StatisticClient::success($module, $interface);
     }
 }
