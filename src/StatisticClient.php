@@ -22,7 +22,6 @@ use Protocols\Siren;
 /**
  * 统计客户端
  *
- * @author workerman.net
  */
 class SirenClient
 {
@@ -106,7 +105,7 @@ class SirenClient
      * @param $ip
      * @param $port
      */
-    public static function setAddress($ip, $port = 55656): void
+    public static function setAddress($ip, $port = 55656)
     {
         self::$ip   = $ip;
         self::$port = $port;
@@ -115,7 +114,7 @@ class SirenClient
     /**
      * @param $token string
      */
-    public static function setToken($token): void
+    public static function setToken($token)
     {
         self::$token = $token;
     }
@@ -129,7 +128,7 @@ class SirenClient
      *
      * @return void
      */
-    public static function tick($module, $interface): void
+    public static function tick($module, $interface)
     {
         self::$timeMap[$module][$interface] = microtime(true);
     }
@@ -141,7 +140,7 @@ class SirenClient
      *
      * @return boolean
      */
-    protected static function report(): bool
+    protected static function report()
     {
 
         if (self::$success) {
@@ -173,7 +172,7 @@ class SirenClient
      *
      * @return bool
      */
-    public static function success($module, $interface): bool
+    public static function success($module, $interface)
     {
         self::$module    = $module;
         self::$interface = $interface;
@@ -190,13 +189,13 @@ class SirenClient
      *
      * @return bool
      */
-    public static function error($module, $interface, $code, $message, $alert = 0): bool
+    public static function error($module, $interface, $code, $message, $alert = 0)
     {
         if (self::$backtrace === null) {
             self::$backtrace = debug_backtrace();
         }
-        self::$file      = self::$backtrace[0]['file'] ?? '';
-        self::$line      = self::$backtrace[0]['line'] ?? '';
+        self::$file      = isset(self::$backtrace[0]['file']) ? self::$backtrace[0]['file'] : '';
+        self::$line      = isset(self::$backtrace[0]['line']) ? self::$backtrace[0]['line'] : '';
         self::$module    = $module;
         self::$interface = $interface;
         self::$success   = 0;
@@ -210,7 +209,7 @@ class SirenClient
     /**
      * @param array $backtrace
      */
-    public static function setBacktrace(array $backtrace): void
+    public static function setBacktrace(array $backtrace)
     {
         self::$backtrace = $backtrace;
     }
@@ -223,7 +222,7 @@ class SirenClient
      *
      * @return bool
      */
-    public static function exception($module, $interface, Exception $exception, $alert = 0): bool
+    public static function exception($module, $interface, Exception $exception, $alert = 0)
     {
         self::$file      = $exception->getFile();
         self::$line      = $exception->getLine();
@@ -243,7 +242,7 @@ class SirenClient
      *
      * @return boolean
      */
-    public static function sendData($address, $buffer): bool
+    public static function sendData($address, $buffer)
     {
         $socket = stream_socket_client($address);
         if (!$socket) {

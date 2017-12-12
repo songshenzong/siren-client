@@ -33,21 +33,21 @@ class Siren
      *
      * @var integer
      */
-    public const PACKAGE_FIXED_LENGTH = 23;
+    const PACKAGE_FIXED_LENGTH = 23;
 
     /**
      * udp 包最大长度
      *
      * @var integer
      */
-    public const MAX_UDP_PACKAGE_SIZE = 65507;
+    const MAX_UDP_PACKAGE_SIZE = 65507;
 
     /**
      * char类型能保存的最大数值
      *
      * @var integer
      */
-    public const MAX_CHAR_VALUE = 255;
+    const MAX_CHAR_VALUE = 255;
 
 
     /**
@@ -55,7 +55,7 @@ class Siren
      *
      * @var integer
      */
-    public const MAX_UNSIGNED_SHORT_VALUE = 65535;
+    const MAX_UNSIGNED_SHORT_VALUE = 65535;
 
 
     /**
@@ -63,7 +63,7 @@ class Siren
      *
      * @return string
      */
-    public static function encode($client): string
+    public static function encode($client)
     {
 
         // 防止模块名过长
@@ -79,9 +79,9 @@ class Siren
         // 不成功就搜集现在的请求参数
         if (!$client::$success) {
             $request = [
-                'HTTP_HOST'       => $_SERVER['HTTP_HOST'] ?? '',
-                'REQUEST_URI'     => $_SERVER['REQUEST_URI'] ?? '',
-                'HTTP_USER_AGENT' => $_SERVER['HTTP_USER_AGENT'] ?? '',
+                'HTTP_HOST'       => isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '',
+                'REQUEST_URI'     => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '',
+                'HTTP_USER_AGENT' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
             ];
             $request = json_encode($request);
         } else {
@@ -137,7 +137,7 @@ class Siren
      *
      * @return array
      */
-    public static function decode($bin_data): array
+    public static function decode($bin_data)
     {
         // 解包
         $data = unpack('Ctoken_length/Crequest_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
@@ -180,7 +180,7 @@ class Siren
 
         return [
             'token'     => $token,
-            'request'   => $request ?? '',
+            'request'   => isset($request) ? $request : '',
             'module'    => $module,
             'interface' => $interface,
             'cost_time' => $data['cost_time'],
@@ -188,8 +188,8 @@ class Siren
             'time'      => $data['time'],
             'code'      => $data['code'],
             'alert'     => $data['alert'],
-            'msg'       => $msg ?? '',
-            'file'      => $file ?? '',
+            'msg'       => isset($msg) ? $msg : '',
+            'file'      => isset($file) ? $file : '',
             'line'      => $data['line']
         ];
     }
