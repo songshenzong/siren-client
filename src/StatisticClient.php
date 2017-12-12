@@ -1,10 +1,10 @@
 <?php
 
-namespace Songshenzong\StatisticClient;
-require_once 'Statistic.php';
+namespace Songshenzong\SirenClient;
+require_once 'Siren.php';
 
 use Exception;
-use Protocols\Statistic;
+use Protocols\Siren;
 
 /**
  * This file is part of workerman.
@@ -24,7 +24,7 @@ use Protocols\Statistic;
  *
  * @author workerman.net
  */
-class StatisticClient
+class SirenClient
 {
     /**
      *
@@ -162,7 +162,7 @@ class StatisticClient
         self::$cost_time = microtime(true) - $time_start;
 
         $report_address = 'udp://' . self::$ip . ':' . self::$port;
-        $bin_data       = Statistic::encode(self::class);
+        $bin_data       = Siren::encode(self::class);
         return self::sendData($report_address, $bin_data);
     }
 

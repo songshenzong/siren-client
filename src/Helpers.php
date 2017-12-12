@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('statisticSetAddress')) {
+if (!function_exists('sirenSetAddress')) {
     /**
      * Get the instance
      *
@@ -8,28 +8,28 @@ if (!function_exists('statisticSetAddress')) {
      * @param     $ip
      * @param int $port
      */
-    function statisticSetAddress($ip, $port = 55656)
+    function sirenSetAddress($ip, $port = 55656)
     {
-        \Songshenzong\StatisticClient\StatisticClient::setAddress($ip, $port);
+        \Songshenzong\SirenClient\SirenClient::setAddress($ip, $port);
     }
 }
 
 
-if (!function_exists('statisticSetToken')) {
+if (!function_exists('sirenSetToken')) {
     /**
      * Get the instance
      *
      *
      * @param     $token string
      */
-    function statisticSetToken($token)
+    function sirenSetToken($token)
     {
-        \Songshenzong\StatisticClient\StatisticClient::setToken($token);
+        \Songshenzong\SirenClient\SirenClient::setToken($token);
     }
 }
 
 
-if (!function_exists('statisticTick')) {
+if (!function_exists('sirenTick')) {
     /**
      * Get the instance
      *
@@ -37,14 +37,14 @@ if (!function_exists('statisticTick')) {
      * @param string $module
      * @param string $interface
      */
-    function statisticTick($module = '', $interface = '')
+    function sirenTick($module = '', $interface = '')
     {
-        \Songshenzong\StatisticClient\StatisticClient::tick($module, $interface);
+        \Songshenzong\SirenClient\SirenClient::tick($module, $interface);
     }
 }
 
 
-if (!function_exists('statisticError')) {
+if (!function_exists('sirenError')) {
     /**
      * Get the instance
      *
@@ -56,15 +56,15 @@ if (!function_exists('statisticError')) {
      *
      * @return bool
      */
-    function statisticError($module, $interface, $code, $message, $alert = 0)
+    function sirenError($module, $interface, $code, $message, $alert = 0)
     {
-        \Songshenzong\StatisticClient\StatisticClient::setBacktrace(debug_backtrace());
-        return \Songshenzong\StatisticClient\StatisticClient::error($module, $interface, $code, $message, $alert);
+        \Songshenzong\SirenClient\SirenClient::setBacktrace(debug_backtrace());
+        return \Songshenzong\SirenClient\SirenClient::error($module, $interface, $code, $message, $alert);
     }
 }
 
 
-if (!function_exists('statisticException')) {
+if (!function_exists('sirenException')) {
     /**
      * Get the instance
      *
@@ -75,14 +75,14 @@ if (!function_exists('statisticException')) {
      *
      * @return bool
      */
-    function statisticException($module, $interface, Exception $exception, $alert = 0)
+    function sirenException($module, $interface, Exception $exception, $alert = 0)
     {
-        return \Songshenzong\StatisticClient\StatisticClient::exception($module, $interface, $exception, $alert);
+        return \Songshenzong\SirenClient\SirenClient::exception($module, $interface, $exception, $alert);
     }
 }
 
 
-if (!function_exists('statisticSuccess')) {
+if (!function_exists('sirenSuccess')) {
     /**
      * Report the success.
      *
@@ -91,8 +91,8 @@ if (!function_exists('statisticSuccess')) {
      *
      * @return bool
      */
-    function statisticSuccess($module, $interface)
+    function sirenSuccess($module, $interface)
     {
-        return \Songshenzong\StatisticClient\StatisticClient::success($module, $interface);
+        return \Songshenzong\SirenClient\SirenClient::success($module, $interface);
     }
 }

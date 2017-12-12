@@ -1,11 +1,11 @@
 <?php
 
-namespace Songshenzong\StatisticClient;
+namespace Songshenzong\SirenClient;
 
 /**
  * Class Facade
  *
- * @package Songshenzong\StatisticClient
+ * @package Songshenzong\SirenClient
  */
 class Facade extends \Illuminate\Support\Facades\Facade
 {
@@ -14,6 +14,6 @@ class Facade extends \Illuminate\Support\Facades\Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'StatisticClient';
+        return 'SirenClient';
     }
 }

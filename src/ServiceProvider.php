@@ -1,11 +1,11 @@
 <?php
 
-namespace Songshenzong\StatisticClient;
+namespace Songshenzong\SirenClient;
 
 /**
  * Class ServiceProvider
  *
- * @package Songshenzong\StatisticClient
+ * @package Songshenzong\SirenClient
  */
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -24,10 +24,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('StatisticClient', function ($app) {
-            return new StatisticClient($app);
+        $this->app->singleton('SirenClient', function ($app) {
+            return new SirenClient($app);
         });
 
-        $this->app->alias('StatisticClient', Facade::class);
+        $this->app->alias('SirenClient', Facade::class);
     }
 }

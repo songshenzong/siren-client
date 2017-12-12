@@ -1,16 +1,16 @@
 {
-  "name": "songshenzong/statistic-client",
-  "description": "Statistic Client",
+  "name": "songshenzong/siren-client",
+  "description": "Siren Client",
   "keywords": [
-    "Statistic",
+    "Siren",
     "UDP",
     "Log"
   ],
   "license": "MIT",
   "homepage": "http://songshenzong.com",
   "support": {
-    "issues": "https://github.com/songshenzong/statistic-client/issues",
-    "source": "https://github.com/songshenzong/statistic-client"
+    "issues": "https://github.com/songshenzong/siren-client/issues",
+    "source": "https://github.com/songshenzong/siren-client"
   },
   "authors": [
     {
@@ -23,7 +23,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Songshenzong\\StatisticClient\\": "src/"
+      "Songshenzong\\SirenClient\\": "src/"
     },
     "files": [
       "src/Helpers.php"
@@ -32,7 +32,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Songshenzong\\StatisticClient\\ServiceProvider"
+        "Songshenzong\\SirenClient\\ServiceProvider"
       ]
     }
   }

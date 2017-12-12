@@ -1,4 +1,4 @@
-# Songzhenzong StatisticClient ChangeLog
+# Songzhenzong SirenClient ChangeLog
 
 ---
 
@@ -7,10 +7,6 @@
 ./vendor/bin/phpcbf src/ --standard=PSR2
 ```
 
-## Version 1.1.0 (2017-11-29)
-
-- Package Discovery
-
-## Version 1.0.0 (2017-03-07)
+## Version 1.0.0 (2017-12-12)
 
 - Created

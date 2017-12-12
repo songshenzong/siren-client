@@ -16,15 +16,15 @@ namespace Protocols;
 
 use function dd;
 use function dump;
-use Songshenzong\StatisticClient\StatisticClient;
+use Songshenzong\SirenClient\SirenClient;
 
 
 /**
- * Class Statistic
+ * Class Siren
  *
  * @package Protocols
  */
-class Statistic
+class Siren
 {
 
 
@@ -59,7 +59,7 @@ class Statistic
 
 
     /**
-     * @param  StatisticClient $client
+     * @param  SirenClient $client
      *
      * @return string
      */
