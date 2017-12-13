@@ -11,12 +11,12 @@ composer require songshenzong/siren-client
 ```
 
 
-## Use
+## Use in Any Case
 ```php
-    // Set the server and port, if not, the default value is 127.0.0.1:55656
-    SirenClient::setAddress('127.0.0.1', 55656);
+    // Set the host and port, if not, the default value is 127.0.0.1:55656
+    SirenClient::setHost('127.0.0.1', 55656);
     
-    // System will store log into your project
+    // Requests will be discarded by the server if the token is incorrect
     SirenClient::setToken('Your Token');
         
         
@@ -43,6 +43,14 @@ composer require songshenzong/siren-client
 
 
 ## Laravel 5.x
+Siren ServiceProvider will set `host` and `token` automatically from `.env` file.
+```bash
+    SIREN_HOST=127.0.0.1
+    SIREN_PORT=55656
+    SIREN_TOKEN=TOKEN
+```
+
+####  Before Version 5.5
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php

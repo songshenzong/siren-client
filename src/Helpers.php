@@ -1,6 +1,6 @@
 <?php
 
-if (!function_exists('sirenSetAddress')) {
+if (!function_exists('sirenSetHost')) {
     /**
      * Get the instance
      *
@@ -8,9 +8,9 @@ if (!function_exists('sirenSetAddress')) {
      * @param     $ip
      * @param int $port
      */
-    function sirenSetAddress($ip, $port = 55656)
+    function sirenSetHost($ip, $port = 55656)
     {
-        \Songshenzong\SirenClient\SirenClient::setAddress($ip, $port);
+        \Songshenzong\SirenClient\SirenClient::setHost($ip, $port);
     }
 }
 

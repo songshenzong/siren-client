@@ -20,8 +20,9 @@ use Protocols\Siren;
  */
 
 /**
- * 统计客户端
+ * Class SirenClient
  *
+ * @package Songshenzong\SirenClient
  */
 class SirenClient
 {
@@ -105,7 +106,7 @@ class SirenClient
      * @param $ip
      * @param $port
      */
-    public static function setAddress($ip, $port = 55656)
+    public static function setHost($ip = '127.0.0.1', $port = 55656)
     {
         self::$ip   = $ip;
         self::$port = $port;
