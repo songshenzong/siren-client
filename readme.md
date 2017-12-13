@@ -59,8 +59,8 @@ Require this package with composer:
           SirenClient::success('User', 'destroyToken');
           // sirenSuccess('User', 'destroyToken');
       } else {
-          SirenClient::error('User', 'destroyToken', 200, 'User 1 token destroy failed');
-          // sirenError('User', 'destroyToken', 200, 'User 1 token destroy failed');
+          SirenClient::error('User', 'destroyToken', 500, 'User 1 token destroy failed');
+          // sirenError('User', 'destroyToken', 500, 'User 1 token destroy failed');
       }
 
  
