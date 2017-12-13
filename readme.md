@@ -7,8 +7,11 @@ Siren Client
 Require this package with composer:
 
 ```shell
-composer require songshenzong/siren-client
+
+     composer require songshenzong/siren-client
+     
 ```
+
 
 
 ## Common Settings
@@ -81,7 +84,9 @@ composer require songshenzong/siren-client
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php
-Songshenzong\SirenClient\ServiceProvider::class,
+
+      Songshenzong\SirenClient\ServiceProvider::class,
+      
 ```
 
 
