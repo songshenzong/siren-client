@@ -115,7 +115,7 @@ class SirenClient
     /**
      * @param $token string
      */
-    public static function setToken($token)
+    public static function setToken($token = '')
     {
         self::$token = $token;
     }
