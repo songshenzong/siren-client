@@ -78,6 +78,7 @@ class Siren
         // 不成功就搜集现在的请求参数
         if (!$client::$success) {
             $request = [
+                'REQUEST_SCHEME'  => isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' : 'http://',
                 'HTTP_HOST'       => isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '',
                 'REQUEST_URI'     => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '',
                 'HTTP_USER_AGENT' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
