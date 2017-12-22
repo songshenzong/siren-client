@@ -14,6 +14,7 @@
 
 namespace Protocols;
 
+use const JSON_UNESCAPED_UNICODE;
 use Songshenzong\SirenClient\SirenClient;
 
 
@@ -81,7 +82,7 @@ class Siren
                 'REQUEST_URI'     => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '',
                 'HTTP_USER_AGENT' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
             ];
-            $request = json_encode($request);
+            $request = json_encode($request, JSON_UNESCAPED_UNICODE);
         } else {
             $request = '';
         }
