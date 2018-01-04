@@ -14,8 +14,8 @@
 
 namespace Protocols;
 
-use const JSON_UNESCAPED_UNICODE;
 use Songshenzong\SirenClient\SirenClient;
+use const JSON_UNESCAPED_UNICODE;
 
 
 /**
@@ -32,7 +32,7 @@ class Siren
      *
      * @var integer
      */
-    const PACKAGE_FIXED_LENGTH = 23;
+    const PACKAGE_FIXED_LENGTH = 24;
 
     /**
      * udp 包最大长度
@@ -78,7 +78,7 @@ class Siren
         // 不成功就搜集现在的请求参数
         if (!$client::$success) {
             $request = [
-                'REQUEST_SCHEME'  => isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' : 'http://',
+                'REQUEST_SCHEME'  => isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http',
                 'HTTP_HOST'       => isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '',
                 'REQUEST_URI'     => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '',
                 'HTTP_USER_AGENT' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
@@ -112,8 +112,7 @@ class Siren
 
         $msg_length = \strlen($client::$msg);
 
-        // 打包
-        return pack('CCCCfCNnNcCn',
+        return pack('CnCCfCNnNcCn',
                     $token_length,
                     $request_length,
                     $module_name_length,
@@ -140,7 +139,8 @@ class Siren
     public static function decode($bin_data)
     {
         // 解包
-        $data = unpack('Ctoken_length/Crequest_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
+        $data = unpack('Ctoken_length/nrequest_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
+
 
         $token = substr($bin_data, self::PACKAGE_FIXED_LENGTH, $data['token_length']);
 
