@@ -10,7 +10,6 @@ namespace Songshenzong\SirenClient;
 class SirenMessage
 {
 
-
     /**
      * @var string
      */
@@ -40,22 +39,22 @@ class SirenMessage
     /**
      * @var int
      */
-    public $code;
+    public $code = 0;
 
     /**
      * @var string
      */
-    public $msg;
+    public $msg = '';
 
     /**
      * @var integer
      */
-    public $alert;
+    public $alert = -1;
 
     /**
      * @var string
      */
-    public $file;
+    public $file = '';
 
     /**
      * @var integer

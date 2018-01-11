@@ -141,16 +141,24 @@ class Siren
 
         $sirenMessage = new SirenMessage();
 
-        if (isset($data['token_length'])) {
-            $sirenMessage->token = substr($bin_data, self::PACKAGE_FIXED_LENGTH, $data['token_length']);
-        } else {
+        if (!isset($data['token_length'],
+            $data['request_length'],
+            $data['module_name_len'],
+            $data['interface_name_len'],
+            $data['cost_time'],
+            $data['success'],
+            $data['code'],
+            $data['msg_len'],
+            $data['time'],
+            $data['alert'],
+            $data['line'],
+            $data['file_len'])) {
+
             return $sirenMessage;
+
         }
 
-
-        if (!isset($data['success'])) {
-            return $sirenMessage;
-        }
+        $sirenMessage->token = substr($bin_data, self::PACKAGE_FIXED_LENGTH, $data['token_length']);
 
 
         if (!$data['success']) {
