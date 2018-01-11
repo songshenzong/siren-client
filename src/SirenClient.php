@@ -58,58 +58,17 @@ class SirenClient
 
 
     /**
-     * @var string
-     */
-    public static $module = '';
-
-    /**
-     * @var string
-     */
-    public static $interface = '';
-
-    /**
-     * @var float
-     */
-    public static $cost_time;
-
-    /**
-     * @var int
-     */
-    public static $success = 1;
-
-    /**
-     * @var int
-     */
-    public static $code;
-
-    /**
-     * @var string
-     */
-    public static $msg;
-
-    /**
-     * @var integer
-     */
-    public static $alert;
-
-    /**
-     * @var string
-     */
-    public static $file;
-
-    /**
-     * @var integer
-     */
-    public static $line;
-
-    /**
      * @param $ip
      * @param $port
      */
     public static function setHost($ip = '127.0.0.1', $port = 55656)
     {
-        self::$ip   = $ip;
-        self::$port = $port;
+        if ($ip !== null) {
+            self::$ip = $ip;
+        }
+        if ($port !== null) {
+            self::$port = $port;
+        }
     }
 
     /**
@@ -136,22 +95,24 @@ class SirenClient
 
 
     /**
+     *
      * 上报统计数据
      *
+     * @param SirenMessage $siren_message
      *
-     * @return boolean
+     * @return bool
      */
-    protected static function report()
+    public static function report(SirenMessage $siren_message)
     {
 
-        if (self::$success) {
+        if ($siren_message->success) {
             self::$backtrace = [];
         }
 
 
-        if (isset(self::$timeMap[self::$module][self::$interface]) && self::$timeMap[self::$module][self::$interface] > 0) {
-            $time_start                                     = self::$timeMap[self::$module][self::$interface];
-            self::$timeMap[self::$module][self::$interface] = 0;
+        if (isset(self::$timeMap[$siren_message->module][$siren_message->interface]) && self::$timeMap[$siren_message->module][$siren_message->interface] > 0) {
+            $time_start                                                       = self::$timeMap[$siren_message->module][$siren_message->interface];
+            self::$timeMap[$siren_message->module][$siren_message->interface] = 0;
         } elseif (isset(self::$timeMap['']['']) && self::$timeMap[''][''] > 0) {
             $time_start            = self::$timeMap[''][''];
             self::$timeMap[''][''] = 0;
@@ -159,11 +120,17 @@ class SirenClient
             $time_start = microtime(true);
         }
 
-        self::$cost_time = microtime(true) - $time_start;
+        $siren_message->token     = self::$token;
+        $siren_message->cost_time = microtime(true) - $time_start;
+
 
         $report_address = 'udp://' . self::$ip . ':' . self::$port;
-        $bin_data       = Siren::encode(self::class);
-        return self::sendData($report_address, $bin_data);
+        $bin_data       = Siren::encode($siren_message);
+        $socket         = stream_socket_client($report_address);
+        if (!$socket) {
+            return false;
+        }
+        return \strlen($bin_data) === stream_socket_sendto($socket, $bin_data);
     }
 
 
@@ -175,9 +142,10 @@ class SirenClient
      */
     public static function success($module, $interface)
     {
-        self::$module    = $module;
-        self::$interface = $interface;
-        return self::report();
+        $sirenMessage            = new SirenMessage();
+        $sirenMessage->module    = $module;
+        $sirenMessage->interface = $interface;
+        return self::report($sirenMessage);
     }
 
 
@@ -195,15 +163,18 @@ class SirenClient
         if (self::$backtrace === null) {
             self::$backtrace = debug_backtrace();
         }
-        self::$file      = isset(self::$backtrace[0]['file']) ? self::$backtrace[0]['file'] : '';
-        self::$line      = isset(self::$backtrace[0]['line']) ? self::$backtrace[0]['line'] : '';
-        self::$module    = $module;
-        self::$interface = $interface;
-        self::$success   = 0;
-        self::$code      = $code;
-        self::$msg       = $message;
-        self::$alert     = $alert;
-        return self::report();
+
+        $sirenMessage            = new SirenMessage();
+        $sirenMessage->module    = $module;
+        $sirenMessage->interface = $interface;
+        $sirenMessage->file      = isset(self::$backtrace[0]['file']) ? self::$backtrace[0]['file'] : '';
+        $sirenMessage->line      = isset(self::$backtrace[0]['line']) ? self::$backtrace[0]['line'] : '';
+        $sirenMessage->success   = 0;
+        $sirenMessage->code      = $code;
+        $sirenMessage->msg       = $message;
+        $sirenMessage->alert     = $alert;
+
+        return self::report($sirenMessage);
     }
 
 
@@ -225,31 +196,16 @@ class SirenClient
      */
     public static function exception($module, $interface, Exception $exception, $alert = 0)
     {
-        self::$file      = $exception->getFile();
-        self::$line      = $exception->getLine();
-        self::$module    = $module;
-        self::$interface = $interface;
-        self::$alert     = $alert;
-        self::$success   = 0;
-        self::$code      = $exception->getCode();
-        self::$msg       = $exception->getMessage();
-        return self::report();
-    }
-
-
-    /**
-     * @param string $address
-     * @param string $buffer
-     *
-     * @return boolean
-     */
-    public static function sendData($address, $buffer)
-    {
-        $socket = stream_socket_client($address);
-        if (!$socket) {
-            return false;
-        }
-        return \strlen($buffer) === stream_socket_sendto($socket, $buffer);
+        $sirenMessage            = new SirenMessage();
+        $sirenMessage->module    = $module;
+        $sirenMessage->interface = $interface;
+        $sirenMessage->file      = $exception->getFile();
+        $sirenMessage->line      = $exception->getLine();
+        $sirenMessage->success   = 0;
+        $sirenMessage->code      = $exception->getCode();
+        $sirenMessage->msg       = $exception->getMessage();
+        $sirenMessage->alert     = $alert;
+        return self::report($sirenMessage);
     }
 
 }
