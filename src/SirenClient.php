@@ -54,7 +54,7 @@ class SirenClient
     /**
      * @var array
      */
-    public static $backtrace = [];
+    public static $backtrace;
 
 
     /**
