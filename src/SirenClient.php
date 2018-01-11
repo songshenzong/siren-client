@@ -104,20 +104,23 @@ class SirenClient
      */
     public static function report(SirenMessage $siren_message)
     {
-
-        if ($siren_message->success) {
-            self::$backtrace = [];
-        }
-
+        self::$backtrace = null;
 
         if (isset(self::$timeMap[$siren_message->module][$siren_message->interface]) && self::$timeMap[$siren_message->module][$siren_message->interface] > 0) {
-            $time_start                                                       = self::$timeMap[$siren_message->module][$siren_message->interface];
+
+            $time_start = self::$timeMap[$siren_message->module][$siren_message->interface];
+
             self::$timeMap[$siren_message->module][$siren_message->interface] = 0;
+
         } elseif (isset(self::$timeMap['']['']) && self::$timeMap[''][''] > 0) {
+
             $time_start            = self::$timeMap[''][''];
             self::$timeMap[''][''] = 0;
+
         } else {
+
             $time_start = microtime(true);
+
         }
 
         $siren_message->token     = self::$token;
