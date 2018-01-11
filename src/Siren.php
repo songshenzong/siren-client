@@ -75,7 +75,6 @@ class Siren
             $message->interface = substr($message->interface, 0, self::MAX_CHAR_VALUE);
         }
 
-        // 不成功就搜集现在的请求参数
         if (!$message->success) {
             $message->request = [
                 'REQUEST_SCHEME'  => isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http',
