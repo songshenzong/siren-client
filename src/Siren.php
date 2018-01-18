@@ -76,13 +76,9 @@ class Siren
         }
 
         if (!$message->success) {
-            $message->request = [
-                'REQUEST_SCHEME'  => isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] : 'http',
-                'HTTP_HOST'       => isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '',
-                'REQUEST_URI'     => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '',
-                'HTTP_USER_AGENT' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
-            ];
-            $message->request = json_encode($message->request, JSON_UNESCAPED_UNICODE);
+            $message->request = isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' : '';
+            $message->request .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+            $message->request .= isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
         }
 
 
