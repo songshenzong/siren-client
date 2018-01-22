@@ -68,16 +68,14 @@ if (!function_exists('sirenException')) {
     /**
      * Get the instance
      *
-     * @param           $module
-     * @param           $interface
      * @param Exception $exception
      * @param           $alert
      *
      * @return bool
      */
-    function sirenException($module, $interface, Exception $exception, $alert = 0)
+    function sirenException(Exception $exception, $alert = 0)
     {
-        return \Songshenzong\SirenClient\SirenClient::exception($module, $interface, $exception, $alert);
+        return \Songshenzong\SirenClient\SirenClient::exception($exception, $alert);
     }
 }
 

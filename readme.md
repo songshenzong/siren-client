@@ -71,8 +71,8 @@ Require this package with composer:
       try {
           throw new Exception('Message');
       } catch (Exception $exception) {
-          SirenClient::exception('System', 'Exception', $exception);
-          // sirenException('System', 'Exception', $exception);
+          SirenClient::exception($exception);
+          // sirenException($exception);
       }
          
 ```

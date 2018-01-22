@@ -190,18 +190,16 @@ class SirenClient
     }
 
     /**
-     * @param           $module
-     * @param           $interface
      * @param Exception $exception
      * @param int       $alert
      *
      * @return bool
      */
-    public static function exception($module, $interface, Exception $exception, $alert = 0)
+    public static function exception(Exception $exception, $alert = 0)
     {
         $sirenMessage            = new SirenMessage();
-        $sirenMessage->module    = $module;
-        $sirenMessage->interface = $interface;
+        $sirenMessage->module    = 'Exception';
+        $sirenMessage->interface = $exception->getCode();
         $sirenMessage->file      = $exception->getFile();
         $sirenMessage->line      = $exception->getLine();
         $sirenMessage->success   = 0;
