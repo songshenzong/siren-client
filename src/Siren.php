@@ -71,8 +71,8 @@ class Siren
         }
 
         // 防止接口名过长
-        if (\strlen($message->interface) > self::MAX_CHAR_VALUE) {
-            $message->interface = substr($message->interface, 0, self::MAX_CHAR_VALUE);
+        if (\strlen($message->submodule) > self::MAX_CHAR_VALUE) {
+            $message->submodule = substr($message->submodule, 0, self::MAX_CHAR_VALUE);
         }
 
         if (!$message->success) {
@@ -87,14 +87,14 @@ class Siren
         $request_length        = \strlen($message->request);
         $file_length           = \strlen($message->file);
         $module_name_length    = \strlen($message->module);
-        $interface_name_length = \strlen($message->interface);
+        $submodule_name_length = \strlen($message->submodule);
         $available_size        = self::MAX_UDP_PACKAGE_SIZE
                                  - self::PACKAGE_FIXED_LENGTH
                                  - $token_length
                                  - $request_length
                                  - $file_length
                                  - $module_name_length
-                                 - $interface_name_length;
+                                 - $submodule_name_length;
 
 
         if (\strlen($message->msg) > $available_size) {
@@ -109,7 +109,7 @@ class Siren
                     $token_length,
                     $request_length,
                     $module_name_length,
-                    $interface_name_length,
+                    $submodule_name_length,
                     $message->cost_time,
                     $message->success ? 1 : 0,
                     $message->code,
@@ -118,7 +118,7 @@ class Siren
                     $message->alert,
                     $message->line,
                     $file_length
-               ) . $message->token . $message->request . $message->module . $message->interface . $message->msg . $message->file;
+               ) . $message->token . $message->request . $message->module . $message->submodule . $message->msg . $message->file;
     }
 
 
@@ -132,7 +132,7 @@ class Siren
     public static function decode($bin_data)
     {
         // 解包
-        $data = unpack('Ctoken_length/nrequest_length/Cmodule_name_len/Cinterface_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
+        $data = unpack('Ctoken_length/nrequest_length/Cmodule_name_len/Csubmodule_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
 
 
         $sirenMessage = new SirenMessage();
@@ -140,7 +140,7 @@ class Siren
         if (!isset($data['token_length'],
             $data['request_length'],
             $data['module_name_len'],
-            $data['interface_name_len'],
+            $data['submodule_name_len'],
             $data['cost_time'],
             $data['success'],
             $data['code'],
@@ -167,7 +167,7 @@ class Siren
                                                    + $data['token_length']
                                                    + $data['request_length']
                                                    + $data['module_name_len']
-                                                   + $data['interface_name_len'],
+                                                   + $data['submodule_name_len'],
                                         $data['msg_len']);
 
 
@@ -175,7 +175,7 @@ class Siren
                                                     + $data['token_length']
                                                     + $data['request_length']
                                                     + $data['module_name_len']
-                                                    + $data['interface_name_len']
+                                                    + $data['submodule_name_len']
                                                     + $data['msg_len'],
                                          $data['file_len']);
         }
@@ -186,11 +186,11 @@ class Siren
                                                   + $data['request_length'],
                                        $data['module_name_len']);
 
-        $sirenMessage->interface = substr($bin_data, self::PACKAGE_FIXED_LENGTH
+        $sirenMessage->submodule = substr($bin_data, self::PACKAGE_FIXED_LENGTH
                                                      + $data['token_length']
                                                      + $data['request_length']
                                                      + $data['module_name_len'],
-                                          $data['interface_name_len']);
+                                          $data['submodule_name_len']);
 
 
         $sirenMessage->cost_time = $data['cost_time'];

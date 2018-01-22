@@ -45,22 +45,22 @@ Require this package with composer:
 ```php
                        
       /**
-      * Module and interface consumption time sirens
+      * Module and submodule consumption time sirens
       */
-      SirenClient::tick('User', 'destroyToken');
-      // sirenTick('User', 'destroyToken');
+      SirenClient::tick('moduleName', 'submoduleName');
+      // sirenTick('moduleName', 'submoduleName');
  
   
    
       /**
       * Send success or failure
       */
-      if (User::destroyToken(1)) {
-          SirenClient::success('User', 'destroyToken');
-          // sirenSuccess('User', 'destroyToken');
+      if (YourClass::action()) {
+          SirenClient::success('moduleName', 'submoduleName');
+          // sirenSuccess('moduleName', 'submoduleName');
       } else {
-          SirenClient::error('User', 'destroyToken', 500, 'User 1 token destroy failed');
-          // sirenError('User', 'destroyToken', 500, 'User 1 token destroy failed');
+          SirenClient::error('moduleName', 'submoduleName', 500, 'Someting wrong');
+          // sirenError('moduleName', 'submoduleName', 500, 'Someting wrong');
       }
 
  

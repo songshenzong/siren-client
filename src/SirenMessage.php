@@ -24,7 +24,7 @@ class SirenMessage
     /**
      * @var string
      */
-    public $interface = '';
+    public $submodule = '';
 
     /**
      * @var float

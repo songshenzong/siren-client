@@ -35,11 +35,11 @@ if (!function_exists('sirenTick')) {
      *
      *
      * @param string $module
-     * @param string $interface
+     * @param string $submodule
      */
-    function sirenTick($module = '', $interface = '')
+    function sirenTick($module = '', $submodule = '')
     {
-        \Songshenzong\SirenClient\SirenClient::tick($module, $interface);
+        \Songshenzong\SirenClient\SirenClient::tick($module, $submodule);
     }
 }
 
@@ -49,17 +49,17 @@ if (!function_exists('sirenError')) {
      * Get the instance
      *
      * @param       $module
-     * @param       $interface
+     * @param       $submodule
      * @param       $code
      * @param       $message
      * @param       $alert
      *
      * @return bool
      */
-    function sirenError($module, $interface, $code, $message, $alert = 0)
+    function sirenError($module, $submodule, $code, $message, $alert = 0)
     {
         \Songshenzong\SirenClient\SirenClient::setBacktrace(debug_backtrace());
-        return \Songshenzong\SirenClient\SirenClient::error($module, $interface, $code, $message, $alert);
+        return \Songshenzong\SirenClient\SirenClient::error($module, $submodule, $code, $message, $alert);
     }
 }
 
@@ -85,12 +85,12 @@ if (!function_exists('sirenSuccess')) {
      * Report the success.
      *
      * @param        $module
-     * @param        $interface
+     * @param        $submodule
      *
      * @return bool
      */
-    function sirenSuccess($module, $interface)
+    function sirenSuccess($module, $submodule)
     {
-        return \Songshenzong\SirenClient\SirenClient::success($module, $interface);
+        return \Songshenzong\SirenClient\SirenClient::success($module, $submodule);
     }
 }

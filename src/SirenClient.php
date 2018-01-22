@@ -84,13 +84,13 @@ class SirenClient
      * 模块接口上报消耗时间记时
      *
      * @param string $module
-     * @param string $interface
+     * @param string $submodule
      *
      * @return void
      */
-    public static function tick($module, $interface)
+    public static function tick($module, $submodule)
     {
-        self::$timeMap[$module][$interface] = microtime(true);
+        self::$timeMap[$module][$submodule] = microtime(true);
     }
 
 
@@ -106,11 +106,11 @@ class SirenClient
     {
         self::$backtrace = null;
 
-        if (isset(self::$timeMap[$siren_message->module][$siren_message->interface]) && self::$timeMap[$siren_message->module][$siren_message->interface] > 0) {
+        if (isset(self::$timeMap[$siren_message->module][$siren_message->submodule]) && self::$timeMap[$siren_message->module][$siren_message->submodule] > 0) {
 
-            $time_start = self::$timeMap[$siren_message->module][$siren_message->interface];
+            $time_start = self::$timeMap[$siren_message->module][$siren_message->submodule];
 
-            self::$timeMap[$siren_message->module][$siren_message->interface] = 0;
+            self::$timeMap[$siren_message->module][$siren_message->submodule] = 0;
 
         } elseif (isset(self::$timeMap['']['']) && self::$timeMap[''][''] > 0) {
 
@@ -139,29 +139,29 @@ class SirenClient
 
     /**
      * @param        $module
-     * @param        $interface
+     * @param        $submodule
      *
      * @return bool
      */
-    public static function success($module, $interface)
+    public static function success($module, $submodule)
     {
         $sirenMessage            = new SirenMessage();
         $sirenMessage->module    = $module;
-        $sirenMessage->interface = $interface;
+        $sirenMessage->submodule = $submodule;
         return self::report($sirenMessage);
     }
 
 
     /**
      * @param       $module
-     * @param       $interface
+     * @param       $submodule
      * @param       $code
      * @param       $message
      * @param       $alert
      *
      * @return bool
      */
-    public static function error($module, $interface, $code, $message, $alert = 0)
+    public static function error($module, $submodule, $code, $message, $alert = 0)
     {
         if (self::$backtrace === null) {
             self::$backtrace = debug_backtrace();
@@ -169,7 +169,7 @@ class SirenClient
 
         $sirenMessage            = new SirenMessage();
         $sirenMessage->module    = $module;
-        $sirenMessage->interface = $interface;
+        $sirenMessage->submodule = $submodule;
         $sirenMessage->file      = isset(self::$backtrace[0]['file']) ? self::$backtrace[0]['file'] : '';
         $sirenMessage->line      = isset(self::$backtrace[0]['line']) ? self::$backtrace[0]['line'] : '';
         $sirenMessage->success   = 0;
@@ -199,7 +199,7 @@ class SirenClient
     {
         $sirenMessage            = new SirenMessage();
         $sirenMessage->module    = 'Exception';
-        $sirenMessage->interface = $exception->getCode();
+        $sirenMessage->submodule = $exception->getCode();
         $sirenMessage->file      = $exception->getFile();
         $sirenMessage->line      = $exception->getLine();
         $sirenMessage->success   = 0;
