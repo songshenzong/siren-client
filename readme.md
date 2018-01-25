@@ -27,7 +27,7 @@ Require this package with composer:
  
   
      /**
-     * Set the host and port, if not, the default value is 127.0.0.1:55656
+     * If not Laravel, Set the `host` and `port`, if not, the default value is 127.0.0.1:55656
      */
      
      SirenClient::setHost('127.0.0.2', 55656);
@@ -35,7 +35,7 @@ Require this package with composer:
  
   
      /**
-     * Requests will be discarded by the server if the token is incorrect
+     * If not Laravel, Set the `token`, Requests will be discarded by the server if the token is incorrect
      */
      
      SirenClient::setToken('Your Token');
