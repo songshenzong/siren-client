@@ -17,10 +17,10 @@ Require this package with composer:
 ```php
 
      /**
-     * If using Laravel, Please write these three fields in the `env` file
-     * Siren ServiceProvider will set `host` and `token` automatically
-     * So you do not need to run the `setHost` and `setToken`
+     * If Laravel, Please write these fields in the `env` file
+     * ServiceProvider will run the `setHost` and `setToken` automatically
      */
+     
      SIREN_HOST=127.0.0.1
      SIREN_PORT=55656
      SIREN_TOKEN=TOKEN
@@ -29,6 +29,7 @@ Require this package with composer:
      /**
      * Set the host and port, if not, the default value is 127.0.0.1:55656
      */
+     
      SirenClient::setHost('127.0.0.2', 55656);
      // sirenSetHost('127.0.0.2', 55656);
  
@@ -36,6 +37,7 @@ Require this package with composer:
      /**
      * Requests will be discarded by the server if the token is incorrect
      */
+     
      SirenClient::setToken('Your Token');
      // sirenSetToken('Your Token');
     
@@ -79,7 +81,7 @@ Require this package with composer:
 
 
 
-####  Before Laravel 5.5
+##  Before Laravel 5.5
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php

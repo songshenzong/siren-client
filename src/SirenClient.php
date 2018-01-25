@@ -27,6 +27,11 @@ use Protocols\Siren;
 class SirenClient
 {
     /**
+     * Version string
+     */
+    const VERSION = '0.8.0';
+
+    /**
      *
      * @var array
      */
