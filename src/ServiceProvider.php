@@ -29,7 +29,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         SirenClient::setToken(env('SIREN_TOKEN'));
 
         $this->app->singleton('SirenClient', function ($app) {
-            return new SirenClient($app);
+            return new SirenClient();
         });
 
         $this->app->alias('SirenClient', Facade::class);
