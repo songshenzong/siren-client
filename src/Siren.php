@@ -15,7 +15,6 @@
 namespace Protocols;
 
 use Songshenzong\SirenClient\SirenMessage;
-use const JSON_UNESCAPED_UNICODE;
 
 
 /**
@@ -83,18 +82,18 @@ class Siren
 
 
         // 防止msg过长
-        $token_length          = \strlen($message->token);
-        $request_length        = \strlen($message->request);
-        $file_length           = \strlen($message->file);
-        $module_name_length    = \strlen($message->module);
-        $submodule_name_length = \strlen($message->submodule);
-        $available_size        = self::MAX_UDP_PACKAGE_SIZE
-                                 - self::PACKAGE_FIXED_LENGTH
-                                 - $token_length
-                                 - $request_length
-                                 - $file_length
-                                 - $module_name_length
-                                 - $submodule_name_length;
+        $token_len      = \strlen($message->token);
+        $request_len    = \strlen($message->request);
+        $file_len       = \strlen($message->file);
+        $module_len     = \strlen($message->module);
+        $submodule_len  = \strlen($message->submodule);
+        $available_size = self::MAX_UDP_PACKAGE_SIZE
+                          - self::PACKAGE_FIXED_LENGTH
+                          - $token_len
+                          - $request_len
+                          - $file_len
+                          - $module_len
+                          - $submodule_len;
 
 
         if (\strlen($message->msg) > $available_size) {
@@ -103,27 +102,26 @@ class Siren
             $message->msg = substr($message->msg, 0, $available_size);
         }
 
-        $msg_length = \strlen($message->msg);
+        $msg_len = \strlen($message->msg);
 
         return pack('CnCCfCNnNcCn',
-                    $token_length,
-                    $request_length,
-                    $module_name_length,
-                    $submodule_name_length,
+                    $token_len,
+                    $request_len,
+                    $module_len,
+                    $submodule_len,
                     $message->cost_time,
                     $message->success ? 1 : 0,
                     $message->code,
-                    $msg_length,
+                    $msg_len,
                     time(),
                     $message->alert,
                     $message->line,
-                    $file_length
+                    $file_len
                ) . $message->token . $message->request . $message->module . $message->submodule . $message->msg . $message->file;
     }
 
 
     /**
-     * 解包
      *
      * @param $bin_data
      *
@@ -131,16 +129,15 @@ class Siren
      */
     public static function decode($bin_data)
     {
-        // 解包
-        $data = unpack('Ctoken_length/nrequest_length/Cmodule_name_len/Csubmodule_name_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
+        $data = unpack('Ctoken_len/nrequest_len/Cmodule_len/Csubmodule_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
 
 
         $sirenMessage = new SirenMessage();
 
-        if (!isset($data['token_length'],
-            $data['request_length'],
-            $data['module_name_len'],
-            $data['submodule_name_len'],
+        if (!isset($data['token_len'],
+            $data['request_len'],
+            $data['module_len'],
+            $data['submodule_len'],
             $data['cost_time'],
             $data['success'],
             $data['code'],
@@ -151,46 +148,45 @@ class Siren
             $data['file_len'])) {
 
             return $sirenMessage;
-
         }
 
-        $sirenMessage->token = substr($bin_data, self::PACKAGE_FIXED_LENGTH, $data['token_length']);
+        $sirenMessage->token = substr($bin_data, self::PACKAGE_FIXED_LENGTH, $data['token_len']);
 
 
         if (!$data['success']) {
             $sirenMessage->request = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                                       + $data['token_length'],
-                                            $data['request_length']);
+                                                       + $data['token_len'],
+                                            $data['request_len']);
 
 
             $sirenMessage->msg = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                                   + $data['token_length']
-                                                   + $data['request_length']
-                                                   + $data['module_name_len']
-                                                   + $data['submodule_name_len'],
+                                                   + $data['token_len']
+                                                   + $data['request_len']
+                                                   + $data['module_len']
+                                                   + $data['submodule_len'],
                                         $data['msg_len']);
 
 
             $sirenMessage->file = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                                    + $data['token_length']
-                                                    + $data['request_length']
-                                                    + $data['module_name_len']
-                                                    + $data['submodule_name_len']
+                                                    + $data['token_len']
+                                                    + $data['request_len']
+                                                    + $data['module_len']
+                                                    + $data['submodule_len']
                                                     + $data['msg_len'],
                                          $data['file_len']);
         }
 
 
         $sirenMessage->module = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                                  + $data['token_length']
-                                                  + $data['request_length'],
-                                       $data['module_name_len']);
+                                                  + $data['token_len']
+                                                  + $data['request_len'],
+                                       $data['module_len']);
 
         $sirenMessage->submodule = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                                     + $data['token_length']
-                                                     + $data['request_length']
-                                                     + $data['module_name_len'],
-                                          $data['submodule_name_len']);
+                                                     + $data['token_len']
+                                                     + $data['request_len']
+                                                     + $data['module_len'],
+                                          $data['submodule_len']);
 
 
         $sirenMessage->cost_time = $data['cost_time'];

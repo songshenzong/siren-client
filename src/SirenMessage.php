@@ -11,6 +11,11 @@ class SirenMessage
 {
 
     /**
+     * Type int
+     */
+    const TYPE_SUCCESS = 1;
+
+    /**
      * @var string
      */
     public $token = '';
@@ -34,7 +39,7 @@ class SirenMessage
     /**
      * @var int
      */
-    public $success = 1;
+    public $success = self::TYPE_SUCCESS;
 
     /**
      * @var int
