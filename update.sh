@@ -12,12 +12,13 @@ if  [ ! -n "$2" ]; then
 fi
 
 
-git push origin :refs/tags/$1
 git tag -d $1
-git tag $1
+git push origin :refs/tags/$1
+
 
 git add .
 git commit -m "$2"
 git push
 
+git tag $1
 git push origin --tags
