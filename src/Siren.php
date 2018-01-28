@@ -15,8 +15,8 @@
 namespace Protocols;
 
 use Exception;
-use function sirenException;
 use Songshenzong\SirenClient\SirenMessage;
+use function sirenException;
 
 
 /**
