@@ -6,18 +6,6 @@ require_once 'Siren.php';
 use Exception;
 use Protocols\Siren;
 
-/**
- * This file is part of workerman.
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the MIT-LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @author    walkor<walkor@workerman.net>
- * @copyright walkor<walkor@workerman.net>
- * @link      http://www.workerman.net/
- * @license   http://www.opensource.org/licenses/mit-license.php MIT License
- */
 
 /**
  * Class SirenClient
@@ -86,8 +74,6 @@ class SirenClient
 
 
     /**
-     * 模块接口上报消耗时间记时
-     *
      * @param string $module
      * @param string $submodule
      *
@@ -100,9 +86,6 @@ class SirenClient
 
 
     /**
-     *
-     * 上报统计数据
-     *
      * @param SirenMessage $siren_message
      *
      * @return bool
