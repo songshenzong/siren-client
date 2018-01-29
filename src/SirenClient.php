@@ -4,7 +4,9 @@ namespace Songshenzong\SirenClient;
 require_once 'Siren.php';
 
 use Exception;
+use Grpc\Server;
 use Protocols\Siren;
+use function substr;
 
 
 /**
@@ -51,8 +53,8 @@ class SirenClient
 
 
     /**
-     * @param $ip
-     * @param $port
+     * @param $ip   Server's IP 接收服务器的IP
+     * @param $port Server's Port 接收服务器的端口
      */
     public static function setHost($ip = '127.0.0.1', $port = 55656)
     {
@@ -65,7 +67,9 @@ class SirenClient
     }
 
     /**
-     * @param $token string
+     * 为你的上报数据设置TOKEN，如果错误，服务器将抛弃数据
+     *
+     * @param $token string Set Your Token 你的TOKEN
      */
     public static function setToken($token = '')
     {
@@ -74,8 +78,10 @@ class SirenClient
 
 
     /**
-     * @param string $module
-     * @param string $submodule
+     * 设置模块子模块可以精确统计耗时
+     *
+     * @param string $module    Module Name 模块
+     * @param string $submodule Submodule Name 子模块
      *
      * @return void
      */
@@ -86,6 +92,9 @@ class SirenClient
 
 
     /**
+     * Report Your UDP
+     * 上报你的消息
+     *
      * @param SirenMessage $siren_message
      *
      * @return bool
@@ -141,11 +150,11 @@ class SirenClient
 
 
     /**
-     * @param       $module
-     * @param       $submodule
-     * @param       $code
-     * @param       $message
-     * @param       $alert
+     * @param   string $module
+     * @param   string $submodule
+     * @param   int    $code    Your Code 你可以自定义错误代码
+     * @param   string $message Your Message 你可以自定义错误消息
+     * @param   int    $alert   [Optional] -1 不发送警报消息 0 永远发送警报消息 2 积累两次后发送
      *
      * @return bool
      */
@@ -178,6 +187,10 @@ class SirenClient
     }
 
     /**
+     * Report Exception(Error)
+     *
+     * 上报异常（以错误的形式）
+     *
      * @param Exception $exception
      * @param int       $alert
      *

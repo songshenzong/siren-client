@@ -2,7 +2,7 @@
 
 Siren Client
 
-## Installation
+## Installation 安装
 
 Require this package with composer:
 
@@ -13,12 +13,15 @@ Require this package with composer:
 
 
 
-## Common Settings
+## Settings 用前设置
 ```php
 
      /**
      * If Laravel, Please write these fields in the `env` file
      * ServiceProvider will run the `setHost` and `setToken` automatically
+     *
+     * 如果使用 Laravel，需要添加以下字段和值，服务提供者会自动设置
+     *
      */
      
      SIREN_HOST=127.0.0.1
@@ -28,16 +31,15 @@ Require this package with composer:
   
      /**
      * If not Laravel, Set the `host` and `port`, if not, the default value is 127.0.0.1:55656
+     * Requests will be discarded by the server if the token is incorrect
+     *
+     * 如果没用 Laravel，需要设置主机、端口、TOKEN，如果 TOKEN 错误服务器会抛弃数据
+     *
      */
      
      SirenClient::setHost('127.0.0.2', 55656);
      // sirenSetHost('127.0.0.2', 55656);
  
-  
-     /**
-     * If not Laravel, Set the `token`, Requests will be discarded by the server if the token is incorrect
-     */
-     
      SirenClient::setToken('Your Token');
      // sirenSetToken('Your Token');
     
@@ -47,8 +49,11 @@ Require this package with composer:
 ```php
                        
       /**
-      * Module and submodule consumption time sirens
+      * Module and submodule consumption time
+      *
+      * tick 模块和子模块可以精确统计时间
       */
+      
       SirenClient::tick('moduleName', 'submoduleName');
       // sirenTick('moduleName', 'submoduleName');
  
@@ -56,7 +61,11 @@ Require this package with composer:
    
       /**
       * Send success or failure
+      *
+      * 发送成功或失败消息
+      *
       */
+      
       if (YourClass::action()) {
           SirenClient::success('moduleName', 'submoduleName');
           // sirenSuccess('moduleName', 'submoduleName');
@@ -69,7 +78,10 @@ Require this package with composer:
   
       /**
       * Handle Exception
+      *
+      * 上传异常（失败类型）
       */
+      
       try {
           throw new Exception('Message');
       } catch (Exception $exception) {
@@ -91,16 +103,16 @@ After updating composer, add the ServiceProvider to the providers array in `conf
 ```
 
 
-## Documentation
+## Documentation 文档
 
 Please refer to our extensive [Wiki documentation](https://github.com/songshenzong/siren-client/wiki) for more information.
 
 
-## Support
+## Support 支持
 
 For answers you may not find in the Wiki, avoid posting issues. Feel free to ask for support on Songshenzong.com
 
 
-## License
+## License 证书
 
 This package is licensed under the [BSD 3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
