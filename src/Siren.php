@@ -140,7 +140,7 @@ class Siren
             }
 
 
-            if ($data['type'] !== SirenMessage::TYPE_ERROR) {
+            if ($data['type'] !== SirenMessage::TYPE_SUCCESS) {
                 $sirenMessage->msg = substr($bin_data, self::PACKAGE_FIXED_LENGTH
                                                        + $data['token_len']
                                                        + $data['request_len']
