@@ -130,14 +130,6 @@ class Siren
                                                 $data['request_len']);
 
 
-                $sirenMessage->msg = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                                       + $data['token_len']
-                                                       + $data['request_len']
-                                                       + $data['module_len']
-                                                       + $data['submodule_len'],
-                                            $data['msg_len']);
-
-
                 $sirenMessage->file = substr($bin_data, self::PACKAGE_FIXED_LENGTH
                                                         + $data['token_len']
                                                         + $data['request_len']
@@ -145,6 +137,16 @@ class Siren
                                                         + $data['submodule_len']
                                                         + $data['msg_len'],
                                              $data['file_len']);
+            }
+
+
+            if ($data['type'] !== SirenMessage::TYPE_ERROR) {
+                $sirenMessage->msg = substr($bin_data, self::PACKAGE_FIXED_LENGTH
+                                                       + $data['token_len']
+                                                       + $data['request_len']
+                                                       + $data['module_len']
+                                                       + $data['submodule_len'],
+                                            $data['msg_len']);
             }
 
 
