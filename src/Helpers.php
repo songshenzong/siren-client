@@ -94,3 +94,37 @@ if (!function_exists('sirenSuccess')) {
         return \Songshenzong\SirenClient\SirenClient::success($module, $submodule);
     }
 }
+
+
+if (!function_exists('sirenLog')) {
+    /**
+     * Report the Log.
+     *
+     * @param $module
+     * @param $submodule
+     * @param $message
+     *
+     * @return bool
+     */
+    function sirenLog($module, $submodule, $message)
+    {
+        return \Songshenzong\SirenClient\SirenClient::log($module, $submodule, $message);
+    }
+}
+
+
+if (!function_exists('sirenNotice')) {
+    /**
+     * Report the Notice.
+     *
+     * @param $module
+     * @param $submodule
+     * @param $message
+     *
+     * @return bool
+     */
+    function sirenNotice($module, $submodule, $message)
+    {
+        return \Songshenzong\SirenClient\SirenClient::notice($module, $submodule, $message);
+    }
+}

@@ -4,9 +4,7 @@ namespace Songshenzong\SirenClient;
 require_once 'Siren.php';
 
 use Exception;
-use Grpc\Server;
 use Protocols\Siren;
-use function substr;
 
 
 /**
@@ -169,7 +167,7 @@ class SirenClient
         $sirenMessage->submodule = $submodule;
         $sirenMessage->file      = isset(self::$backtrace[0]['file']) ? self::$backtrace[0]['file'] : '';
         $sirenMessage->line      = isset(self::$backtrace[0]['line']) ? self::$backtrace[0]['line'] : '';
-        $sirenMessage->success   = 0;
+        $sirenMessage->type      = SirenMessage::TYPE_ERROR;
         $sirenMessage->code      = $code;
         $sirenMessage->msg       = $message;
         $sirenMessage->alert     = $alert;
@@ -203,10 +201,58 @@ class SirenClient
         $sirenMessage->submodule = $exception->getCode();
         $sirenMessage->file      = $exception->getFile();
         $sirenMessage->line      = $exception->getLine();
-        $sirenMessage->success   = 0;
+        $sirenMessage->type      = SirenMessage::TYPE_ERROR;
         $sirenMessage->code      = $exception->getCode();
         $sirenMessage->msg       = $exception->getMessage();
         $sirenMessage->alert     = $alert;
+        return self::report($sirenMessage);
+    }
+
+
+    /**
+     * Report Log
+     *
+     * 上报日志
+     *
+     * @param $module
+     * @param $submodule
+     * @param $message
+     *
+     * @return bool
+     */
+    public static function log($module, $submodule, $message)
+    {
+        $sirenMessage            = new SirenMessage();
+        $sirenMessage->module    = $module;
+        $sirenMessage->submodule = $submodule;
+        $sirenMessage->type      = SirenMessage::TYPE_LOG;
+        $sirenMessage->msg       = $message;
+        $sirenMessage->alert     = -1;
+
+        return self::report($sirenMessage);
+    }
+
+
+    /**
+     * Report Notice
+     *
+     * 上报通知（记录日志）
+     *
+     * @param $module
+     * @param $submodule
+     * @param $message
+     *
+     * @return bool
+     */
+    public static function notice($module, $submodule, $message)
+    {
+        $sirenMessage            = new SirenMessage();
+        $sirenMessage->module    = $module;
+        $sirenMessage->submodule = $submodule;
+        $sirenMessage->type      = SirenMessage::TYPE_NOTICE;
+        $sirenMessage->msg       = $message;
+        $sirenMessage->alert     = 0;
+
         return self::report($sirenMessage);
     }
 

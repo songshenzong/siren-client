@@ -58,10 +58,13 @@ class Siren
         $message->submodule = mb_strcut($message->submodule, 0, self::MAX_CHAR_VALUE);
 
 
-        if (!$message->success) {
+        if ($message->type !== SirenMessage::TYPE_SUCCESS) {
             $message->request .= isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' : '';
             $message->request .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
             $message->request .= isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+            if ($message->request === '://') {
+                $message->request = '';
+            }
         }
 
 
@@ -90,7 +93,7 @@ class Siren
                     $module_len,
                     $submodule_len,
                     $message->cost_time,
-                    $message->success ? 1 : 0,
+                    $message->type,
                     $message->code,
                     $msg_len,
                     time(),
@@ -108,7 +111,7 @@ class Siren
      */
     public static function decode($bin_data)
     {
-        $data = unpack('Ctoken_len/nrequest_len/Cmodule_len/Csubmodule_len/fcost_time/Csuccess/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
+        $data = unpack('Ctoken_len/nrequest_len/Cmodule_len/Csubmodule_len/fcost_time/Ctype/Ncode/nmsg_len/Ntime/calert/Cline/nfile_len', $bin_data);
 
 
         $sirenMessage = new SirenMessage();
@@ -121,9 +124,9 @@ class Siren
             }
 
 
-            if (!$data['success']) {
-                $sirenMessage->request = substr($bin_data, self::PACKAGE_FIXED_LENGTH
-                                                           + $data['token_len'],
+            if ($data['type'] === SirenMessage::TYPE_ERROR) {
+                $sirenMessage->request = substr($bin_data,
+                                                self::PACKAGE_FIXED_LENGTH + $data['token_len'],
                                                 $data['request_len']);
 
 
@@ -158,14 +161,14 @@ class Siren
 
 
             $sirenMessage->cost_time = $data['cost_time'];
-            $sirenMessage->success   = $data['success'];
+            $sirenMessage->type      = $data['type'];
             $sirenMessage->time      = $data['time'];
             $sirenMessage->code      = $data['code'];
             $sirenMessage->alert     = $data['alert'];
             $sirenMessage->line      = $data['line'];
-
             $sirenMessage->module    = mb_strcut($sirenMessage->module, 0, self::MAX_CHAR_VALUE);
             $sirenMessage->submodule = mb_strcut($sirenMessage->submodule, 0, self::MAX_CHAR_VALUE);
+
         } catch (Exception $exception) {
             sirenException($exception);
             return $sirenMessage;

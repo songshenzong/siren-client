@@ -11,9 +11,27 @@ class SirenMessage
 {
 
     /**
-     * Type int
+     * Type of Message int Error
+     */
+    const TYPE_ERROR = 0;
+
+
+    /**
+     * Type of Message int Success
      */
     const TYPE_SUCCESS = 1;
+
+
+    /**
+     * Type of Message int Log
+     */
+    const TYPE_LOG = 2;
+
+
+    /**
+     * Type of Message int Notice
+     */
+    const TYPE_NOTICE = 3;
 
     /**
      * @var string
@@ -37,9 +55,9 @@ class SirenMessage
     public $cost_time = 0;
 
     /**
-     * @var int
+     * @var int Type of Message
      */
-    public $success = self::TYPE_SUCCESS;
+    public $type = self::TYPE_SUCCESS;
 
     /**
      * @var int
