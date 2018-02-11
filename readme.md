@@ -9,7 +9,7 @@
 
 Siren Client
 
-## Installation 安装
+## 安装 Installation
 
 Require this package with composer:
 
@@ -20,7 +20,7 @@ Require this package with composer:
 
 
 
-## Settings 用前设置
+## 设置 Settings
 ```php
 
      /**
@@ -52,7 +52,7 @@ Require this package with composer:
 
 ```
 
-## Report
+## 上报 Report
 ```php
 
       /**
@@ -100,7 +100,7 @@ Require this package with composer:
 
 
 
-##  Before Laravel 5.5
+##  兼容 Before Laravel 5.5
 After updating composer, add the ServiceProvider to the providers array in `config/app.php`
 
 ```php
@@ -110,16 +110,16 @@ After updating composer, add the ServiceProvider to the providers array in `conf
 ```
 
 
-## Documentation 文档
+## 文档 Documentation
 
 Please refer to our extensive [Wiki documentation](https://github.com/songshenzong/siren-client/wiki) for more information.
 
 
-## Support 支持
+## 支持 Support
 
 For answers you may not find in the Wiki, avoid posting issues. Feel free to ask for support on Songshenzong.com
 
 
-## License 证书
+## 证书 License
 
 This package is licensed under the [BSD 3-Clause license](http://opensource.org/licenses/BSD-3-Clause).
