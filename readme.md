@@ -5,7 +5,7 @@
 [![License](https://poser.pugx.org/songshenzong/siren-client/license.svg)](https://packagist.org/packages/songshenzong/siren-client)
 [![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/siren-client.svg)](https://packagist.org/packages/songshenzong/siren-client)
 
-## About
+## 关于 About
 
 Siren Client
 
