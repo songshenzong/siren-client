@@ -77,8 +77,8 @@ Require this package with composer:
           SirenClient::success('moduleName', 'submoduleName');
           // sirenSuccess('moduleName', 'submoduleName');
       } else {
-          SirenClient::error('moduleName', 'submoduleName', 500, 'Someting wrong');
-          // sirenError('moduleName', 'submoduleName', 500, 'Someting wrong');
+          SirenClient::error('moduleName', 'submoduleName', 500, 'Something wrong');
+          // sirenError('moduleName', 'submoduleName', 500, 'Something wrong');
       }
 
 
@@ -100,13 +100,12 @@ Require this package with composer:
 
 
 
-##  兼容 Before Laravel 5.5
-After updating composer, add the ServiceProvider to the providers array in `config/app.php`
+##  配置 Laravel
 
-```php
+Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
 
-      Songshenzong\SirenClient\ServiceProvider::class,
-
+```shell
+php artisan vendor:publish --provider="Songshenzong\SirenClient\ServiceProvider"
 ```
 
 

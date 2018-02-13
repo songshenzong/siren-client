@@ -1,7 +1,8 @@
 <?php
 
 namespace Songshenzong\SirenClient;
-use function env;
+
+use function config;
 
 /**
  * Class ServiceProvider
@@ -19,14 +20,26 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
 
     /**
+     * Boot the service provider.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->publishes([
+                             __DIR__ . '/../config/siren.php' => config_path('siren.php'),
+                         ]);
+    }
+
+    /**
      * Register the service provider.
      *
      * @return void
      */
     public function register()
     {
-        SirenClient::setHost(env('SIREN_HOST'), env('SIREN_PORT'));
-        SirenClient::setToken(env('SIREN_TOKEN'));
+        SirenClient::setHost(config('siren.client.host'), config('siren.client.port'));
+        SirenClient::setToken(config('siren.client.token'));
 
         $this->app->singleton('SirenClient', function ($app) {
             return new SirenClient();
