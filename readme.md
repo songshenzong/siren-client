@@ -19,6 +19,14 @@ Require this package with composer:
 ```
 
 
+##  配置 Laravel
+
+Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
+
+```shell
+php artisan vendor:publish --provider="Songshenzong\SirenClient\ServiceProvider"
+```
+
 
 ## 设置 Settings
 ```php
@@ -100,13 +108,6 @@ Require this package with composer:
 
 
 
-##  配置 Laravel
-
-Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
-
-```shell
-php artisan vendor:publish --provider="Songshenzong\SirenClient\ServiceProvider"
-```
 
 
 ## 文档 Documentation
