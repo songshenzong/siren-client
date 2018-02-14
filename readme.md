@@ -17,7 +17,6 @@ Require this package with composer:
 composer require songshenzong/siren-client
 ```
 
-
 ##  配置 Laravel
 
 Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
