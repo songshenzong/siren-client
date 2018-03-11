@@ -91,19 +91,19 @@ class SirenClient
      * Report Your UDP
      * 上报你的消息
      *
-     * @param SirenMessage $siren_message
+     * @param SirenPacket $packet
      *
      * @return bool
      */
-    public static function report(SirenMessage $siren_message)
+    public static function report(SirenPacket $packet)
     {
         self::$backtrace = null;
 
-        if (isset(self::$timeMap[$siren_message->module][$siren_message->submodule]) && self::$timeMap[$siren_message->module][$siren_message->submodule] > 0) {
+        if (isset(self::$timeMap[$packet->module][$packet->submodule]) && self::$timeMap[$packet->module][$packet->submodule] > 0) {
 
-            $time_start = self::$timeMap[$siren_message->module][$siren_message->submodule];
+            $time_start = self::$timeMap[$packet->module][$packet->submodule];
 
-            self::$timeMap[$siren_message->module][$siren_message->submodule] = 0;
+            self::$timeMap[$packet->module][$packet->submodule] = 0;
 
         } elseif (isset(self::$timeMap['']['']) && self::$timeMap[''][''] > 0) {
 
@@ -116,12 +116,12 @@ class SirenClient
 
         }
 
-        $siren_message->token     = self::$token;
-        $siren_message->cost_time = microtime(true) - $time_start;
+        $packet->token     = self::$token;
+        $packet->cost_time = microtime(true) - $time_start;
 
 
         $report_address = 'udp://' . self::$ip . ':' . self::$port;
-        $bin_data       = SirenProtocols::encode($siren_message);
+        $bin_data       = SirenProtocol::encode($packet);
         $socket         = stream_socket_client($report_address);
         if (!$socket) {
             return false;
@@ -138,7 +138,7 @@ class SirenClient
      */
     public static function success($module, $submodule)
     {
-        $sirenMessage            = new SirenMessage();
+        $sirenMessage            = new SirenPacket();
         $sirenMessage->module    = $module;
         $sirenMessage->submodule = $submodule;
         return self::report($sirenMessage);
@@ -160,12 +160,12 @@ class SirenClient
             self::$backtrace = debug_backtrace();
         }
 
-        $sirenMessage            = new SirenMessage();
+        $sirenMessage            = new SirenPacket();
         $sirenMessage->module    = $module;
         $sirenMessage->submodule = $submodule;
         $sirenMessage->file      = isset(self::$backtrace[0]['file']) ? self::$backtrace[0]['file'] : '';
         $sirenMessage->line      = isset(self::$backtrace[0]['line']) ? self::$backtrace[0]['line'] : '';
-        $sirenMessage->type      = SirenMessage::TYPE_ERROR;
+        $sirenMessage->type      = SirenPacket::TYPE_ERROR;
         $sirenMessage->code      = $code;
         $sirenMessage->msg       = $message;
         $sirenMessage->alert     = $alert;
@@ -194,12 +194,12 @@ class SirenClient
      */
     public static function exception(Exception $exception, $alert = 0)
     {
-        $sirenMessage            = new SirenMessage();
+        $sirenMessage            = new SirenPacket();
         $sirenMessage->module    = 'Exception';
         $sirenMessage->submodule = $exception->getCode();
         $sirenMessage->file      = $exception->getFile();
         $sirenMessage->line      = $exception->getLine();
-        $sirenMessage->type      = SirenMessage::TYPE_ERROR;
+        $sirenMessage->type      = SirenPacket::TYPE_ERROR;
         $sirenMessage->code      = $exception->getCode();
         $sirenMessage->msg       = $exception->getMessage();
         $sirenMessage->alert     = $alert;
@@ -220,10 +220,10 @@ class SirenClient
      */
     public static function log($module, $submodule, $message)
     {
-        $sirenMessage            = new SirenMessage();
+        $sirenMessage            = new SirenPacket();
         $sirenMessage->module    = $module;
         $sirenMessage->submodule = $submodule;
-        $sirenMessage->type      = SirenMessage::TYPE_LOG;
+        $sirenMessage->type      = SirenPacket::TYPE_LOG;
         $sirenMessage->msg       = $message;
         $sirenMessage->alert     = -1;
 
@@ -244,10 +244,10 @@ class SirenClient
      */
     public static function notice($module, $submodule, $message)
     {
-        $sirenMessage            = new SirenMessage();
+        $sirenMessage            = new SirenPacket();
         $sirenMessage->module    = $module;
         $sirenMessage->submodule = $submodule;
-        $sirenMessage->type      = SirenMessage::TYPE_NOTICE;
+        $sirenMessage->type      = SirenPacket::TYPE_NOTICE;
         $sirenMessage->msg       = $message;
         $sirenMessage->alert     = 0;
 

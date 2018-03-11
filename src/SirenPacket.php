@@ -3,11 +3,11 @@
 namespace Songshenzong\SirenClient;
 
 /**
- * Class SirenMessage
+ * Class SirenPacket
  *
  * @package Songshenzong\SirenClient
  */
-class SirenMessage
+class SirenPacket
 {
 
     /**
