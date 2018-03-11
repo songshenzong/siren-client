@@ -1,10 +1,8 @@
 <?php
 
 namespace Songshenzong\SirenClient;
-require_once 'Siren.php';
 
 use Exception;
-use Protocols\Siren;
 
 
 /**
@@ -123,7 +121,7 @@ class SirenClient
 
 
         $report_address = 'udp://' . self::$ip . ':' . self::$port;
-        $bin_data       = Siren::encode($siren_message);
+        $bin_data       = SirenProtocols::encode($siren_message);
         $socket         = stream_socket_client($report_address);
         if (!$socket) {
             return false;
