@@ -5,12 +5,23 @@ if (!function_exists('sirenSetHost')) {
      * Get the instance
      *
      *
-     * @param     $ip
+     * @param     $host
      * @param int $port
      */
-    function sirenSetHost($ip, $port = 55656)
+    function sirenSetHost($host)
     {
-        \Songshenzong\SirenClient\SirenClient::setHost($ip, $port);
+        \Songshenzong\SirenClient\SirenClient::setHost($host);
+    }
+}
+
+
+if (!function_exists('sirenSetPort')) {
+    /**
+     * @param int $port
+     */
+    function sirenSetPort($port = 55656)
+    {
+        \Songshenzong\SirenClient\SirenClient::setPort($port);
     }
 }
 

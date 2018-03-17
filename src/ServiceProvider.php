@@ -24,7 +24,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
                              __DIR__ . '/../config/siren.php' => config_path('siren.php'),
@@ -36,12 +36,13 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        SirenClient::setHost(config('siren.client.host'), config('siren.client.port'));
+        SirenClient::setHost(config('siren.client.host'));
+        SirenClient::setPort(config('siren.client.port'));
         SirenClient::setToken(config('siren.client.token'));
 
-        $this->app->singleton('SirenClient', function ($app) {
+        $this->app->singleton('SirenClient', function () {
             return new SirenClient();
         });
 

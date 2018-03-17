@@ -1,0 +1,20 @@
+language: php
+install: true
+php:
+  - 7.2
+  - nightly
+before_script:
+  - curl --version
+  - composer self-update
+  - composer install --no-interaction --prefer-source --dev
+  - curl -sSfL -o ~/.phpenv/versions/hhvm/bin/phpunit https://phar.phpunit.de/phpunit-5.7.phar
+script: phpunit
+deploy:
+  provider: releases
+  api_key:
+    secure: fbhk244pFaPCRpuwYIJ/RHAWU/Wx+N4Ldoy69P/va8fDWsKUC6XEICBZO0xkekw44t63IKzAVRH/zJZWxL9nOb/70ggFhOndWDW4Fw/0QzHuIFK5olW/Vtf3vBU565JsTJsl9XwDyjAGTTRAgirWt0WN8TaVmukQwGfH+/wiW/RmE6sWViIkKbR3fHRMldl8Tvb+X8LdpnwrWLWYO8jXHuY16WXixtTgcI1PmGqGH45YKVX4qWms0qXJzS6+vylsc4hTNUZBD/LYA8LUKfFomvwA+Lxe4V3Wnwet5Rajie8pV5exEYACldvYTkHtTBFkobVoI/U7Uim3JdvkPE9LJEhDx/9T9bEQNys5W115J33CuTtBa0E3N9CmtrwQAYJ5Ycngmx3oVzB5qDz+G55lEArEZzTmCP6vnSRFnr4hIkBS7uyavh1SfdxjVMfQaNEB/FKvzWTiJlZ2jY2JfWoYA8a9o7yuWS2CPzbF4IvZHDF9RTLWYvklWqDfhd3wno/Gj2H+VQZI7x4J9FBliYM34kPYk/3eg9xJ90pNWhNEqPmFdoNkeCOLcM8YvQvBbWTFLCpcSC3joOymvOCqxN/9RloGRZc35/r+pFSihGpYXMONPG2qqoYj3tfUr9oqtPJ6PCXF7QC+FKMyE/2N6fepG4UYgo4EKsDdyYxAkK1g1XA=
+  file:
+    - "README.md"
+  on:
+    repo: songshenzong/siren-client
+    tags: true

@@ -1,13 +1,11 @@
 [![Songshenzong](https://cdn.songshenzong.com/images/logo.png)](https://songshenzong.com)
 
+[![Build Status](https://travis-ci.org/songshenzong/siren-client.svg?branch=master)](https://travis-ci.org/songshenzong/siren-client)
 [![Total Downloads](https://poser.pugx.org/songshenzong/siren-client/d/total.svg)](https://packagist.org/packages/songshenzong/siren-client)
 [![Latest Stable Version](https://poser.pugx.org/songshenzong/siren-client/v/stable.svg)](https://packagist.org/packages/songshenzong/siren-client)
 [![License](https://poser.pugx.org/songshenzong/siren-client/license.svg)](https://packagist.org/packages/songshenzong/siren-client)
 [![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/siren-client.svg)](https://packagist.org/packages/songshenzong/siren-client)
 
-## 关于 About
-
-Siren Client
 
 ## 安装 Installation
 
@@ -43,7 +41,7 @@ SIREN_TOKEN=TOKEN
 
 
 /**
-* If not Laravel, Set the `host` and `port`, if not, the default value is 127.0.0.1:55656
+* If not Laravel, Set the `host` and `port`, the default value is 127.0.0.1:55656
 * Requests will be discarded by the server if the token is incorrect
 *
 * 如果没用 Laravel，需要设置主机、端口、TOKEN，如果 TOKEN 错误服务器会抛弃数据

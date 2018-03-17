@@ -2,36 +2,45 @@
 
 namespace Songshenzong\SirenClient;
 
+use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+use Ramsey\Uuid\Uuid;
+
 /**
- * Class SirenPacket
+ * Class Packet
  *
  * @package Songshenzong\SirenClient
  */
-class SirenPacket
+class Packet
 {
 
     /**
      * Type of Message int Error
      */
-    const TYPE_ERROR = 0;
+    public const TYPE_ERROR = 0;
 
 
     /**
      * Type of Message int Success
      */
-    const TYPE_SUCCESS = 1;
+    public const TYPE_SUCCESS = 1;
 
 
     /**
      * Type of Message int Log
      */
-    const TYPE_LOG = 2;
+    public const TYPE_LOG = 2;
 
 
     /**
      * Type of Message int Notice
      */
-    const TYPE_NOTICE = 3;
+    public const TYPE_NOTICE = 3;
+
+
+    /**
+     * @var string
+     */
+    public static $uuid;
 
     /**
      * @var string
@@ -89,13 +98,37 @@ class SirenPacket
      */
     public $request = '';
 
-    /**
-     * @var string
-     */
-    public $ip;
 
     /**
      * @var string
      */
     public $time;
+
+
+    /**
+     * Packet constructor.
+     */
+    public function __construct()
+    {
+        self::getUuid();
+    }
+
+
+    /**
+     * @return string
+     */
+    public static function getUuid(): string
+    {
+        if (!self::$uuid) {
+            try {
+                $uuid1      = Uuid::uuid1();
+                self::$uuid = $uuid1->toString();
+            } catch (UnsatisfiedDependencyException $e) {
+                self::$uuid = '';
+            }
+        }
+
+        return self::$uuid;
+    }
 }
+
