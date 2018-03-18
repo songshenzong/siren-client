@@ -3,6 +3,7 @@
 namespace Songshenzong\Siren;
 
 use Exception;
+use function is_array;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Uuid;
 use Songshenzong\HttpClient\HttpClient;
@@ -122,11 +123,11 @@ class Siren
             $time_start = microtime(true);
         }
 
-        $packet->token     = self::$config['token'];
+        $packet->token     = self::getConfig('token');
         $packet->cost_time = microtime(true) - $time_start;
 
 
-        switch (strtolower(self::$config['protocol'])) {
+        switch (strtolower(self::getConfig('protocol'))) {
             case 'udp':
                 self::reportUdp($packet);
                 break;
@@ -154,7 +155,16 @@ class Siren
     {
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
-        $connect = socket_connect($socket, self::$config['tcp']['host'], self::$config['tcp']['port']);
+        $config = self::getConfig('tcp');
+        if (!is_array($config)) {
+            return false;
+        }
+
+        if (!isset($config['host'], $config['port'])) {
+            return false;
+        }
+
+        $connect = socket_connect($socket, $config['host'], $config['port']);
         if (!$connect) {
             socket_close($socket);
             return false;
@@ -172,18 +182,27 @@ class Siren
     /**
      * @param \Songshenzong\Siren\Packet $packet
      *
-     * @return \Songshenzong\HttpClient\Response
+     * @return bool
      */
     protected static function reportHttp(Packet $packet)
     {
-        $url = self::$config['http']['host'] . ':' . self::$config['http']['port'];
+        $config = self::getConfig('http');
+        if (!is_array($config)) {
+            return false;
+        }
+
+        if (!isset($config['host'], $config['port'])) {
+            return false;
+        }
+
+        $url = $config['host'] . ':' . $config['port'];
 
         $options = [
             'headers' => ['Content-Type' => 'application/json'],
             'json'    => $packet
         ];
 
-        return HttpClient::post($url, $options);
+        return (bool) HttpClient::post($url, $options);
     }
 
 
@@ -194,8 +213,17 @@ class Siren
      */
     protected static function reportUdp(Packet $packet)
     {
+        $config = self::getConfig('udp');
+        if (!is_array($config)) {
+            return false;
+        }
+
+        if (!isset($config['host'], $config['port'])) {
+            return false;
+        }
+
         $bin_data    = UdpProtocol::encode($packet);
-        $udp_address = 'udp://' . self::$config['udp']['host'] . ':' . self::$config['udp']['port'];
+        $udp_address = 'udp://' . $config['host'] . ':' . $config['port'];
         $socket      = stream_socket_client($udp_address);
         if (!$socket) {
             return false;

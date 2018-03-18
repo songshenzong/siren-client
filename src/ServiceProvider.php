@@ -40,7 +40,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $config = config('siren');
 
-        if ($config) {
+        if (config('siren')) {
             Siren::setConfig($config);
         }
 
