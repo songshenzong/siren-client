@@ -3,11 +3,10 @@
 namespace Songshenzong\Siren;
 
 use Exception;
-use function is_array;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Uuid;
 use Songshenzong\HttpClient\HttpClient;
-use function json_encode;
+use function is_array;
 use function strtolower;
 
 /**
@@ -171,10 +170,10 @@ class Siren
         }
 
 
-        $msg = json_encode($packet);
-        socket_write($socket, $msg, strlen($msg));
+        socket_write($socket, $packet, strlen($packet));
         socket_shutdown($socket);
         socket_close($socket);
+
         return true;
     }
 
@@ -228,6 +227,7 @@ class Siren
         if (!$socket) {
             return false;
         }
+
         return \strlen($bin_data) === stream_socket_sendto($socket, $bin_data);
     }
 
@@ -242,6 +242,7 @@ class Siren
         $sirenMessage            = new Packet();
         $sirenMessage->module    = $module;
         $sirenMessage->submodule = $submodule;
+
         return self::report($sirenMessage);
     }
 
@@ -293,15 +294,16 @@ class Siren
      */
     public static function exception(Exception $exception, $alert = SIREN_ALERT_ALWAYS)
     {
-        $sirenMessage            = new Packet();
-        $sirenMessage->module    = 'Exception';
-        $sirenMessage->submodule = $exception->getCode();
-        $sirenMessage->file      = $exception->getFile();
-        $sirenMessage->line      = $exception->getLine();
-        $sirenMessage->type      = SIREN_TYPE_ERROR;
-        $sirenMessage->msg       = $exception->getMessage();
-        $sirenMessage->alert     = $alert;
-        return self::report($sirenMessage);
+        $packet            = new Packet();
+        $packet->module    = 'Exception';
+        $packet->submodule = $exception->getCode();
+        $packet->file      = $exception->getFile();
+        $packet->line      = $exception->getLine();
+        $packet->type      = SIREN_TYPE_ERROR;
+        $packet->msg       = $exception->getMessage();
+        $packet->alert     = $alert;
+
+        return self::report($packet);
     }
 
 
@@ -318,14 +320,14 @@ class Siren
      */
     public static function log($module, $submodule, $message)
     {
-        $sirenMessage            = new Packet();
-        $sirenMessage->module    = $module;
-        $sirenMessage->submodule = $submodule;
-        $sirenMessage->type      = SIREN_TYPE_LOG;
-        $sirenMessage->msg       = $message;
-        $sirenMessage->alert     = -1;
+        $packet            = new Packet();
+        $packet->module    = $module;
+        $packet->submodule = $submodule;
+        $packet->type      = SIREN_TYPE_LOG;
+        $packet->msg       = $message;
+        $packet->alert     = -1;
 
-        return self::report($sirenMessage);
+        return self::report($packet);
     }
 
 
@@ -342,14 +344,14 @@ class Siren
      */
     public static function notice($module, $submodule, $message)
     {
-        $sirenMessage            = new Packet();
-        $sirenMessage->module    = $module;
-        $sirenMessage->submodule = $submodule;
-        $sirenMessage->type      = SIREN_TYPE_NOTICE;
-        $sirenMessage->msg       = $message;
-        $sirenMessage->alert     = 0;
+        $packet            = new Packet();
+        $packet->module    = $module;
+        $packet->submodule = $submodule;
+        $packet->type      = SIREN_TYPE_NOTICE;
+        $packet->msg       = $message;
+        $packet->alert     = 0;
 
-        return self::report($sirenMessage);
+        return self::report($packet);
     }
 
 }

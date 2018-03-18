@@ -24,7 +24,5 @@ class Packet
         $this->uuid = Siren::getUuid();
         $this->time = microtime(true);
     }
-
-
 }
 

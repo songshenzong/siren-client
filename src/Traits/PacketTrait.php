@@ -2,6 +2,8 @@
 
 namespace Songshenzong\Siren\Traits;
 
+use function \json_encode;
+
 /**
  * Trait PacketTrait
  *
@@ -12,7 +14,7 @@ trait PacketTrait
     /**
      * @var string
      */
-    public $version = '1.00.00';
+    public $version = SIREN_VERSION;
 
     /**
      * @var string
@@ -73,5 +75,13 @@ trait PacketTrait
      * @var string
      */
     public $time;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return json_encode($this, JSON_UNESCAPED_UNICODE);
+    }
 }
 

@@ -2,6 +2,10 @@
 
 namespace Songshenzong\Siren;
 
+use const SIREN_MAX_MODULE_LENGTH;
+use const SIREN_MAX_MSG_LENGTH;
+use const SIREN_MAX_SUBMODULE_LENGTH;
+
 
 /**
  * Class UdpProtocol
@@ -32,13 +36,18 @@ class UdpProtocol
             }
         }
 
+        if ($packet->module) {
+            $packet->module = mb_strcut($packet->module, 0, SIREN_MAX_MODULE_LENGTH);
+        }
 
-        // if (\strlen($packet->msg) > $available_size) {
-        //     $packet->msg = substr($packet->msg, 0, $available_size);
-        // }
+        if ($packet->submodule) {
+            $packet->submodule = mb_strcut($packet->submodule, 0, SIREN_MAX_SUBMODULE_LENGTH);
+        }
 
-        $json       = \json_encode($packet);
-        $packet_len = \strlen($json);
-        return pack('n', $packet_len) . $json;
+        if ($packet->msg) {
+            $packet->msg = mb_strcut($packet->msg, 0, SIREN_MAX_MSG_LENGTH);
+        }
+
+        return pack('n', \strlen($packet)) . $packet;
     }
 }
