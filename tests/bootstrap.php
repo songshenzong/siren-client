@@ -8,4 +8,4 @@ if (!ini_get('date.timezone')) {
 }
 
 $loader = require dirname(__DIR__) . '/vendor/autoload.php';
-$loader->add('Songshenzong\\SirenClient\\Test\\', __DIR__);
+$loader->add('Songshenzong\\Siren\\Test\\', __DIR__);

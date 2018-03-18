@@ -20,7 +20,7 @@ composer require songshenzong/siren-client
 Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
 
 ```shell
-php artisan vendor:publish --provider="Songshenzong\SirenClient\ServiceProvider"
+php artisan vendor:publish --provider="Songshenzong\Siren\ServiceProvider"
 ```
 
 
@@ -35,8 +35,8 @@ php artisan vendor:publish --provider="Songshenzong\SirenClient\ServiceProvider"
 *
 */
 
-SIREN_HOST=127.0.0.1
-SIREN_PORT=55656
+SIREN_UDP_HOST=127.0.0.1
+SIREN_UDP_PORT=55656
 SIREN_TOKEN=TOKEN
 
 
@@ -48,11 +48,9 @@ SIREN_TOKEN=TOKEN
 *
 */
 
-SirenClient::setHost('127.0.0.2', 55656);
-// sirenSetHost('127.0.0.2', 55656);
+Siren::setHost('127.0.0.2', 55656);
 
-SirenClient::setToken('Your Token');
-// sirenSetToken('Your Token');
+Siren::setToken('Your Token');
 
 ```
 
@@ -65,8 +63,7 @@ SirenClient::setToken('Your Token');
 * tick 模块和子模块可以精确统计时间
 */
 
-SirenClient::tick('moduleName', 'submoduleName');
-// sirenTick('moduleName', 'submoduleName');
+Siren::tick('moduleName', 'submoduleName');
 
 
 
@@ -78,11 +75,9 @@ SirenClient::tick('moduleName', 'submoduleName');
 */
 
 if (YourClass::action()) {
-  SirenClient::success('moduleName', 'submoduleName');
-  // sirenSuccess('moduleName', 'submoduleName');
+  Siren::success('moduleName', 'submoduleName');
 } else {
-  SirenClient::error('moduleName', 'submoduleName', 500, 'Something wrong');
-  // sirenError('moduleName', 'submoduleName', 500, 'Something wrong');
+  Siren::error('moduleName', 'submoduleName', 500, 'Something wrong');
 }
 
 
@@ -96,8 +91,7 @@ if (YourClass::action()) {
 try {
   throw new Exception('Message');
 } catch (Exception $exception) {
-  SirenClient::exception($exception);
-  // sirenException($exception);
+  Siren::exception($exception);
 }
 
 ```

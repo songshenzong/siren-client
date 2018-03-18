@@ -1,4 +1,4 @@
-# Songzhenzong SirenClient ChangeLog
+# Songzhenzong Siren ChangeLog
 
 ---
 

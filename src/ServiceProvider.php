@@ -1,13 +1,13 @@
 <?php
 
-namespace Songshenzong\SirenClient;
+namespace Songshenzong\Siren;
 
 use function config;
 
 /**
  * Class ServiceProvider
  *
- * @package Songshenzong\SirenClient
+ * @package Songshenzong\Siren
  */
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -24,7 +24,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      *
      * @return void
      */
-    public function boot(): void
+    public function boot()
     {
         $this->publishes([
                              __DIR__ . '/../config/siren.php' => config_path('siren.php'),
@@ -36,16 +36,18 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      *
      * @return void
      */
-    public function register(): void
+    public function register()
     {
-        SirenClient::setHost(config('siren.client.host'));
-        SirenClient::setPort(config('siren.client.port'));
-        SirenClient::setToken(config('siren.client.token'));
+        $config = config('siren');
 
-        $this->app->singleton('SirenClient', function () {
-            return new SirenClient();
+        if ($config) {
+            Siren::setConfig($config);
+        }
+
+        $this->app->singleton('Siren', function () {
+            return new Siren();
         });
 
-        $this->app->alias('SirenClient', Facade::class);
+        $this->app->alias('Siren', Facade::class);
     }
 }
