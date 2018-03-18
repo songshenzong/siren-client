@@ -68,10 +68,16 @@ class Siren
 
 
     /**
-     * @return array
+     * @param null $key
+     * @param null $default
+     *
+     * @return array|mixed|null
      */
-    public static function getConfig()
+    public static function getConfig($key = null, $default = null)
     {
+        if ($key !== null) {
+            return isset(self::$config[$key]) ? self::$config[$key] : $default;
+        }
         return self::$config;
     }
 
