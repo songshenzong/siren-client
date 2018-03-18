@@ -5,6 +5,10 @@ define('SIREN_TYPE_SUCCESS', 1);
 define('SIREN_TYPE_LOG', 2);
 define('SIREN_TYPE_NOTICE', 3);
 
+define('SIREN_ALERT_NEVER', -1);
+define('SIREN_ALERT_ALWAYS', 0);
+define('SIREN_ALERT_TIMES', 5);
+
 define('SIREN_RESPONSE_ERROR', 1);
 define('SIREN_RESPONSE_SUCCESS', 0);
 

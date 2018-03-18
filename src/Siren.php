@@ -249,12 +249,12 @@ class Siren
     /**
      * @param   string $module
      * @param   string $submodule
-     * @param   string $message Your Message 你可以自定义错误消息
-     * @param   int    $alert   [Optional] -1 不发送警报消息 0 永远发送警报消息 2 积累两次后发送
+     * @param   string $message
+     * @param   int    $alert
      *
      * @return bool
      */
-    public static function error($module, $submodule, $message, $alert = 0)
+    public static function error($module, $submodule, $message, $alert = SIREN_ALERT_ALWAYS)
     {
         if (self::$backtrace === null) {
             self::$backtrace = debug_backtrace();
@@ -291,7 +291,7 @@ class Siren
      *
      * @return bool
      */
-    public static function exception(Exception $exception, $alert = 0)
+    public static function exception(Exception $exception, $alert = SIREN_ALERT_ALWAYS)
     {
         $sirenMessage            = new Packet();
         $sirenMessage->module    = 'Exception';
