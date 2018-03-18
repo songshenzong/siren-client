@@ -132,20 +132,19 @@ class Siren
 
         switch (strtoupper(self::getConfig('protocol'))) {
             case SIREN_PROTOCOL_UDP:
-                self::reportUdp($packet);
+                return self::reportUdp($packet);
                 break;
             case SIREN_PROTOCOL_TCP:
-                self::reportTcp($packet);
+                return self::reportTcp($packet);
                 break;
             case SIREN_PROTOCOL_HTTP:
-                self::reportHttp($packet);
+                return self::reportHttp($packet);
                 break;
             default:
-                self::reportUdp($packet);
+                return self::reportUdp($packet);
 
         }
 
-        return true;
     }
 
 
