@@ -20,9 +20,9 @@ class Packet
      */
     public function __construct()
     {
-        $this->type = SIREN_TYPE_SUCCESS;
-        $this->uuid = Siren::getUuid();
-        $this->time = microtime(true);
+        $this->type       = SIREN_TYPE_SUCCESS;
+        $this->request_id = Siren::getRequestId();
+        $this->time       = microtime(true);
     }
 }
 

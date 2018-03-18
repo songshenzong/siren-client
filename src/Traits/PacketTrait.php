@@ -2,7 +2,7 @@
 
 namespace Songshenzong\Siren\Traits;
 
-use function \json_encode;
+use function json_encode;
 
 /**
  * Trait PacketTrait
@@ -21,10 +21,11 @@ trait PacketTrait
      */
     public $token = '';
 
+
     /**
      * @var string
      */
-    public $uuid;
+    public $request_id;
 
     /**
      * @var string

@@ -5,12 +5,11 @@ namespace Songshenzong\Siren;
 use Exception;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Uuid;
+use Songshenzong\HttpClient\HttpClient;
 use const SIREN_PROTOCOL_HTTP;
 use const SIREN_PROTOCOL_TCP;
 use const SIREN_PROTOCOL_UDP;
-use Songshenzong\HttpClient\HttpClient;
 use function is_array;
-use function strtolower;
 use function strtoupper;
 
 /**
@@ -23,7 +22,7 @@ class Siren
     /**
      * @var string
      */
-    protected static $uuid;
+    protected static $request_id;
 
     /**
      *
@@ -46,21 +45,18 @@ class Siren
     /**
      * @return string
      */
-    public static function getUuid()
+    public static function getRequestId()
     {
-
-        if (!self::$uuid) {
+        if (!self::$request_id) {
             try {
-                $uuid1      = Uuid::uuid1();
-                self::$uuid = $uuid1->toString();
+                self::$request_id = Uuid::uuid1()->toString();
             } catch (UnsatisfiedDependencyException $e) {
-                self::$uuid = '';
+                self::$request_id = '';
             }
         }
 
-        return self::$uuid;
+        return self::$request_id;
     }
-
 
     /**
      * @param array $config
