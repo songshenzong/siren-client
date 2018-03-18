@@ -5,9 +5,13 @@ namespace Songshenzong\Siren;
 use Exception;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Uuid;
+use const SIREN_PROTOCOL_HTTP;
+use const SIREN_PROTOCOL_TCP;
+use const SIREN_PROTOCOL_UDP;
 use Songshenzong\HttpClient\HttpClient;
 use function is_array;
 use function strtolower;
+use function strtoupper;
 
 /**
  * Class Siren
@@ -126,14 +130,14 @@ class Siren
         $packet->cost_time = microtime(true) - $time_start;
 
 
-        switch (strtolower(self::getConfig('protocol'))) {
-            case 'udp':
+        switch (strtoupper(self::getConfig('protocol'))) {
+            case SIREN_PROTOCOL_UDP:
                 self::reportUdp($packet);
                 break;
-            case 'tcp':
+            case SIREN_PROTOCOL_TCP:
                 self::reportTcp($packet);
                 break;
-            case 'http':
+            case SIREN_PROTOCOL_HTTP:
                 self::reportHttp($packet);
                 break;
             default:
