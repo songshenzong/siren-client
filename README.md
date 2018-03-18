@@ -7,7 +7,7 @@
 [![PHP Version](https://img.shields.io/packagist/php-v/songshenzong/siren-client.svg)](https://packagist.org/packages/songshenzong/siren-client)
 
 
-## 安装 Installation
+## Installation
 
 Require this package with composer:
 
@@ -15,7 +15,7 @@ Require this package with composer:
 composer require songshenzong/siren-client
 ```
 
-##  配置 Laravel
+## Laravel
 
 Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
 
@@ -24,43 +24,51 @@ php artisan vendor:publish --provider="Songshenzong\Siren\ServiceProvider"
 ```
 
 
-## 设置 Settings
+## Settings
 ```php
 
 /**
-* If Laravel, Please write these fields in the `env` file
-* ServiceProvider will run the `setHost` and `setToken` automatically
-*
-* 如果使用 Laravel，需要添加以下字段和值，服务提供者会自动设置
-*
+* If Laravel, Just write these fields in the `env` file
 */
 
+SIREN_TOKEN=TOKEN
+SIREN_PROTOCOL=udp
 SIREN_UDP_HOST=127.0.0.1
 SIREN_UDP_PORT=55656
-SIREN_TOKEN=TOKEN
-
+SIREN_TCP_HOST=127.0.0.1
+SIREN_TCP_PORT=55657
+SIREN_HTTP_HOST=127.0.0.1
+SIREN_HTTP_PORT=55658
 
 /**
-* If not Laravel, Set the `host` and `port`, the default value is 127.0.0.1:55656
+* If not Laravel, You Need to `setConfig`
 * Requests will be discarded by the server if the token is incorrect
-*
-* 如果没用 Laravel，需要设置主机、端口、TOKEN，如果 TOKEN 错误服务器会抛弃数据
-*
 */
 
-Siren::setHost('127.0.0.2', 55656);
-
-Siren::setToken('Your Token');
+Siren::setConfig([
+                     'token'    => '',
+                     'protocol' => env('SIREN_PROTOCOL', 'udp'),
+                     'udp'      => [
+                         'host' => '127.0.0.1',
+                         'port' => 55656
+                     ],
+                     'tcp'      => [
+                         'host' => '127.0.0.1',
+                         'port' => 55657,
+                     ],
+                     'http'     => [
+                         'host' => '127.0.0.1',
+                         'port' => 55658,
+                     ],
+                 ]);
 
 ```
 
-## 上报 Report
+## Report
 ```php
 
 /**
 * Module and submodule consumption time
-*
-* tick 模块和子模块可以精确统计时间
 */
 
 Siren::tick('moduleName', 'submoduleName');
@@ -69,9 +77,6 @@ Siren::tick('moduleName', 'submoduleName');
 
 /**
 * Send success or failure
-*
-* 发送成功或失败消息
-*
 */
 
 if (YourClass::action()) {
@@ -84,8 +89,6 @@ if (YourClass::action()) {
 
 /**
 * Handle Exception
-*
-* 上传异常（失败类型）
 */
 
 try {
@@ -98,18 +101,16 @@ try {
 
 
 
-
-
-## 文档 Documentation
+## Documentation
 
 Please refer to our extensive [Wiki documentation](https://github.com/songshenzong/siren-client/wiki) for more information.
 
 
-## 支持 Support
+## Support
 
 For answers you may not find in the Wiki, avoid posting issues. Feel free to ask for support on Songshenzong.com
 
 
-## 证书 License
+## License
 
 This package is licensed under the [BSD 3-Clause license](http://opensource.org/licenses/BSD-3-Clause).

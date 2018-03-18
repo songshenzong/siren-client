@@ -11,14 +11,14 @@ return [
         'port' => env('SIREN_UDP_PORT', 55656),
     ],
 
-    'http' => [
-        'host' => env('SIREN_HTTP_HOST', '127.0.0.1'),
-        'port' => env('SIREN_HTTP_PORT', 55657),
-    ],
-
     'tcp' => [
         'host' => env('SIREN_TCP_HOST', '127.0.0.1'),
-        'port' => env('SIREN_TCP_PORT', 55658),
+        'port' => env('SIREN_TCP_PORT', 55657),
+    ],
+
+    'http' => [
+        'host' => env('SIREN_HTTP_HOST', '127.0.0.1'),
+        'port' => env('SIREN_HTTP_PORT', 55658),
     ],
 
 ];
