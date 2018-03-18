@@ -15,7 +15,7 @@ class SirenTest extends TestCase
      */
     public function testError()
     {
-        $this->assertTrue(Siren::error('1', '1', '1'));
+        $this->assertFalse(Siren::error('1', '1', '1'));
     }
 
 }
