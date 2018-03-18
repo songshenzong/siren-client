@@ -2,6 +2,10 @@
 
 define('SIREN_VERSION', '1.00.00');
 
+define('SIREN_PROTOCOL_UDP', 'UDP');
+define('SIREN_PROTOCOL_TCP', 'TCP');
+define('SIREN_PROTOCOL_HTTP', 'HTTP');
+
 define('SIREN_TYPE_ERROR', 0);
 define('SIREN_TYPE_SUCCESS', 1);
 define('SIREN_TYPE_LOG', 2);
