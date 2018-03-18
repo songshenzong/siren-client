@@ -46,8 +46,8 @@ SIREN_HTTP_PORT=55658
 */
 
 Siren::setConfig([
-                     'token'    => '',
-                     'protocol' => env('SIREN_PROTOCOL', 'udp'),
+                     'token'    => 'YourToken',
+                     'protocol' => 'udp',
                      'udp'      => [
                          'host' => '127.0.0.1',
                          'port' => 55656
