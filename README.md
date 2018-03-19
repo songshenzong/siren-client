@@ -22,7 +22,7 @@ composer require songshenzong/siren-client
 * If Laravel, Just write these fields in the `env` file
 */
  
-SIREN_TOKEN=2835a9e6a13c572f5.74850394
+SIREN_TOKEN=YourToken
 SIREN_PROTOCOL=tcp
 SIREN_UDP_SERVER=127.0.0.1:55656|localhost:55656|0.0.0.0:55656
 SIREN_TCP_SERVER=127.0.0.1:55657
