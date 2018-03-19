@@ -6,19 +6,14 @@ return [
 
     'protocol' => env('SIREN_PROTOCOL', 'udp'),
 
-    'udp' => [
-        'host' => env('SIREN_UDP_HOST', '127.0.0.1'),
-        'port' => env('SIREN_UDP_PORT', 55656),
-    ],
+    'servers' => [
 
-    'tcp' => [
-        'host' => env('SIREN_TCP_HOST', '127.0.0.1'),
-        'port' => env('SIREN_TCP_PORT', 55657),
-    ],
+        'udp' => env('SIREN_UDP_SERVER', '127.0.0.1:55656'),
 
-    'http' => [
-        'host' => env('SIREN_HTTP_HOST', '127.0.0.1'),
-        'port' => env('SIREN_HTTP_PORT', 55658),
-    ],
+        'tcp' => env('SIREN_TCP_SERVER', '127.0.0.1:55657'),
+
+        'http' => env('SIREN_HTTPl_HOST', '127.0.0.1:55658'),
+
+    ]
 
 ];

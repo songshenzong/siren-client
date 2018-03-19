@@ -2,6 +2,7 @@
 
 namespace Songshenzong\Siren;
 
+use function dd;
 use Exception;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Uuid;
@@ -9,7 +10,6 @@ use Songshenzong\HttpClient\HttpClient;
 use const SIREN_PROTOCOL_HTTP;
 use const SIREN_PROTOCOL_TCP;
 use const SIREN_PROTOCOL_UDP;
-use function is_array;
 use function strtoupper;
 
 /**
@@ -124,6 +124,14 @@ class Siren
 
         $packet->token     = self::getConfig('token');
         $packet->cost_time = microtime(true) - $time_start;
+        if ($packet->type !== SIREN_TYPE_SUCCESS) {
+            $packet->request .= isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' : '';
+            $packet->request .= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+            $packet->request .= isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+            if ($packet->request === '://') {
+                $packet->request = '';
+            }
+        }
 
 
         switch (strtoupper(self::getConfig('protocol'))) {
@@ -151,18 +159,9 @@ class Siren
      */
     protected static function reportTcp(Packet $packet)
     {
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-
-        $config = self::getConfig('tcp');
-        if (!is_array($config)) {
-            return false;
-        }
-
-        if (!isset($config['host'], $config['port'])) {
-            return false;
-        }
-
-        $connect = socket_connect($socket, $config['host'], $config['port']);
+        $server  = self::getServer('tcp');
+        $socket  = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        $connect = socket_connect($socket, $server->host, $server->port);
         if (!$connect) {
             socket_close($socket);
             return false;
@@ -184,17 +183,8 @@ class Siren
      */
     protected static function reportHttp(Packet $packet)
     {
-        $config = self::getConfig('http');
-        if (!is_array($config)) {
-            return false;
-        }
-
-        if (!isset($config['host'], $config['port'])) {
-            return false;
-        }
-
-        $url = $config['host'] . ':' . $config['port'];
-
+        $server  = self::getServer('http');
+        $url     = $server->protocol . '://' . $server->host . ':' . $server->port;
         $options = [
             'headers' => ['Content-Type' => 'application/json'],
             'json'    => $packet
@@ -205,24 +195,46 @@ class Siren
 
 
     /**
+     * @param string $protocol
+     *
+     * @return Server
+     */
+    protected static function getServer($protocol = 'udp')
+    {
+        $servers = Siren::getConfig('servers');
+        if (!$servers) {
+            die('Servers Not Found');
+        }
+
+        $hosts = isset($servers[$protocol]) ? $servers[$protocol] : [];
+        if (!$hosts) {
+            die('Server Not Found:' . $protocol);
+        }
+
+        $explode = explode('|', $hosts);
+
+        // Maybe Only One Server
+        if ($hosts === $explode[0]) {
+            return new Server($explode[0], $protocol);
+        }
+
+        // Get random server
+        $random_key  = array_rand($explode, 1);
+        $random_host = $explode[$random_key];
+        return new Server($random_host, $protocol);
+    }
+
+    /**
      * @param Packet $packet
      *
      * @return bool
      */
     protected static function reportUdp(Packet $packet)
     {
-        $config = self::getConfig('udp');
-        if (!is_array($config)) {
-            return false;
-        }
-
-        if (!isset($config['host'], $config['port'])) {
-            return false;
-        }
-
-        $bin_data    = UdpProtocol::encode($packet);
-        $udp_address = 'udp://' . $config['host'] . ':' . $config['port'];
-        $socket      = stream_socket_client($udp_address);
+        $server   = self::getServer('udp');
+        $bin_data = UdpProtocol::encode($packet);
+        $host     = $server->protocol . '://' . $server->host . ':' . $server->port;
+        $socket   = stream_socket_client($host);
         if (!$socket) {
             return false;
         }

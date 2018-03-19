@@ -3,6 +3,7 @@
 namespace Songshenzong\Siren;
 
 use function config;
+use function dd;
 
 /**
  * Class ServiceProvider
@@ -39,10 +40,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     public function register()
     {
         $config = config('siren');
-
-        if (config('siren')) {
+        if ($config) {
             Siren::setConfig($config);
         }
+
 
         $this->app->singleton('Siren', function () {
             return new Siren();
@@ -50,4 +51,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->app->alias('Siren', Facade::class);
     }
+
+
 }

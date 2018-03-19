@@ -15,6 +15,40 @@ Require this package with composer:
 composer require songshenzong/siren-client
 ```
 
+
+
+## Settings
+```php
+
+/**
+* If Laravel, Just write these fields in the `env` file
+*/
+ 
+SIREN_TOKEN=2835a9e6a13c572f5.74850394
+SIREN_PROTOCOL=tcp
+SIREN_UDP_SERVER=127.0.0.1:55656|localhost:55656|0.0.0.0:55656
+SIREN_TCP_SERVER=127.0.0.1:55657
+SIREN_HTTP_SERVER=127.0.0.1:55658
+ 
+  
+/**
+* If not Laravel, You Need to `setConfig`
+* Requests will be discarded by the server when the token is incorrect
+*/
+ 
+Siren::setConfig([
+                     'token'    => 'YourToken',
+                     'protocol' => 'udp',
+                     'servers'  => [
+                         'udp'  => '127.0.0.1:55656|127.0.0.2:55656',
+                         'tcp'  => '127.0.0.1:55657"',
+                         'http' => '127.0.0.1:55658"',
+                      ]
+                 ]);
+ 
+```
+
+
 ## Laravel
 
 Publish configuration files. If not, They can not be serialized correctly when you execute the `config:cache` Artisan command.
@@ -24,79 +58,40 @@ php artisan vendor:publish --provider="Songshenzong\Siren\ServiceProvider"
 ```
 
 
-## Settings
-```php
-
-/**
-* If Laravel, Just write these fields in the `env` file
-*/
-
-SIREN_TOKEN=TOKEN
-SIREN_PROTOCOL=udp
-SIREN_UDP_HOST=127.0.0.1
-SIREN_UDP_PORT=55656
-SIREN_TCP_HOST=127.0.0.1
-SIREN_TCP_PORT=55657
-SIREN_HTTP_HOST=127.0.0.1
-SIREN_HTTP_PORT=55658
-
-/**
-* If not Laravel, You Need to `setConfig`
-* Requests will be discarded by the server if the token is incorrect
-*/
-
-Siren::setConfig([
-                     'token'    => 'YourToken',
-                     'protocol' => 'udp',
-                     'udp'      => [
-                         'host' => '127.0.0.1',
-                         'port' => 55656
-                     ],
-                     'tcp'      => [
-                         'host' => '127.0.0.1',
-                         'port' => 55657,
-                     ],
-                     'http'     => [
-                         'host' => '127.0.0.1',
-                         'port' => 55658,
-                     ],
-                 ]);
-
-```
 
 ## Report
 ```php
-
+ 
 /**
 * Module and submodule consumption time
 */
-
+ 
 Siren::tick('moduleName', 'submoduleName');
-
-
-
+ 
+  
+   
 /**
 * Send success or failure
 */
-
+  
 if (YourClass::action()) {
   Siren::success('moduleName', 'submoduleName');
 } else {
   Siren::error('moduleName', 'submoduleName', 500, 'Something wrong');
 }
-
-
-
+ 
+ 
+ 
 /**
 * Handle Exception
 */
-
+ 
 try {
   throw new Exception('Message');
 } catch (Exception $exception) {
   Siren::exception($exception);
 }
-
+ 
 ```
 
 
