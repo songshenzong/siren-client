@@ -3,7 +3,6 @@
 namespace Songshenzong\Siren;
 
 use function config;
-use function dd;
 
 /**
  * Class ServiceProvider
