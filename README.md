@@ -21,7 +21,6 @@ composer require songshenzong/siren-client
 /**
 * If Laravel, Just write these fields in the `env` file
 */
- 
 SIREN_TOKEN=YourToken
 SIREN_PROTOCOL=tcp
 SIREN_UDP_SERVER=127.0.0.1:55656|127.0.0.2:55656
@@ -33,7 +32,6 @@ SIREN_HTTP_SERVER=127.0.0.1:55658
 * If not Laravel, You Need to `setConfig`
 * Requests will be discarded by the server when the token is incorrect
 */
- 
 Siren::setConfig([
                      'token'    => 'YourToken',
                      'protocol' => 'udp',
@@ -65,7 +63,6 @@ php artisan vendor:publish --provider="Songshenzong\Siren\ServiceProvider"
 /**
 * Module and submodule consumption time
 */
- 
 Siren::tick('moduleName', 'submoduleName');
  
   
@@ -73,7 +70,6 @@ Siren::tick('moduleName', 'submoduleName');
 /**
 * Send success or failure
 */
-  
 if (YourClass::action()) {
   Siren::success('moduleName', 'submoduleName');
 } else {
@@ -85,7 +81,6 @@ if (YourClass::action()) {
 /**
 * Handle Exception
 */
- 
 try {
   throw new Exception('Message');
 } catch (Exception $exception) {
