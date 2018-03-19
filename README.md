@@ -1,5 +1,3 @@
-[![Songshenzong](https://cdn.songshenzong.com/images/logo.png)](https://songshenzong.com)
-
 [![Build Status](https://travis-ci.org/songshenzong/siren-client.svg?branch=master)](https://travis-ci.org/songshenzong/siren-client)
 [![Total Downloads](https://poser.pugx.org/songshenzong/siren-client/d/total.svg)](https://packagist.org/packages/songshenzong/siren-client)
 [![Latest Stable Version](https://poser.pugx.org/songshenzong/siren-client/v/stable.svg)](https://packagist.org/packages/songshenzong/siren-client)
