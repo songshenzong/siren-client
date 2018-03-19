@@ -22,10 +22,13 @@ composer require songshenzong/siren-client
 * If Laravel, Just write these fields in the `env` file
 */
 SIREN_TOKEN=YourToken
-SIREN_PROTOCOL=tcp
-SIREN_UDP_SERVER=127.0.0.1:55656|127.0.0.2:55656
-SIREN_TCP_SERVER=127.0.0.1:55657
-SIREN_HTTP_SERVER=127.0.0.1:55658
+SIREN_PROTOCOL=udp
+SIREN_UDP_HOST=127.0.0.1
+SIREN_UDP_PORT=55656
+SIREN_TCP_HOST=127.0.0.1
+SIREN_TCP_PORT=55657
+SIREN_HTTP_HOST=127.0.0.1
+SIREN_HTTP_PORT=55658
  
   
 /**
@@ -36,10 +39,19 @@ Siren::setConfig([
                      'token'    => 'YourToken',
                      'protocol' => 'udp',
                      'servers'  => [
-                         'udp'  => '127.0.0.1:55656|127.0.0.2:55656',
-                         'tcp'  => '127.0.0.1:55657"',
-                         'http' => '127.0.0.1:55658"',
-                      ]
+                         'udp'  => [
+                             'host' => '127.0.0.1',
+                             'port' => '55656'
+                         ],
+                         'tcp'  => [
+                             'host' => '127.0.0.1',
+                             'port' => '55657'
+                         ],
+                         'http' => [
+                             'host' => '127.0.0.1',
+                             'port' => '55658'
+                         ],
+                     ]
                  ]);
  
   

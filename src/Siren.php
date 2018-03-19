@@ -3,6 +3,7 @@
 namespace Songshenzong\Siren;
 
 use function dd;
+use function dump;
 use Exception;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Uuid;
@@ -207,21 +208,12 @@ class Siren
         }
 
         $hosts = isset($servers[$protocol]) ? $servers[$protocol] : [];
-        if (!$hosts) {
+
+        if (!isset($hosts['host'], $hosts['port'])) {
             die('Server Not Found:' . $protocol);
         }
 
-        $explode = explode('|', $hosts);
-
-        // Maybe Only One Server
-        if ($hosts === $explode[0]) {
-            return new Server($explode[0], $protocol);
-        }
-
-        // Get random server
-        $random_key  = array_rand($explode, 1);
-        $random_host = $explode[$random_key];
-        return new Server($random_host, $protocol);
+        return new Server($hosts['host'], $hosts['port'], $protocol);
     }
 
     /**

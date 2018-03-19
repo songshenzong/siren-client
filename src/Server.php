@@ -4,6 +4,11 @@
 namespace Songshenzong\Siren;
 
 
+use function dump;
+use function str_replace;
+use function trim;
+use function var_dump;
+
 class Server
 {
 
@@ -25,17 +30,14 @@ class Server
     /**
      * Server constructor.
      *
-     * @param $random_host
+     * @param $host
+     * @param $port
      * @param $protocol
      */
-    public function __construct($random_host, $protocol)
+    public function __construct($host, $port, $protocol)
     {
-        $host_explode = explode(':', $random_host);
-        if ($random_host === $host_explode[0]) {
-            die('Server Format Error:' . $host_explode[0]);
-        }
-        $this->host     = $host_explode[0];
-        $this->port     = $host_explode[1];
+        $this->host     = trim($host);
+        $this->port     = trim($port);
         $this->protocol = $protocol;
     }
 
