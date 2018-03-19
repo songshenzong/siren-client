@@ -44,7 +44,6 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
             Siren::setConfig($config);
         }
 
-
         $this->app->singleton('Siren', function () {
             return new Siren();
         });
