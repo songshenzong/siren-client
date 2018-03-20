@@ -21,7 +21,7 @@
     }
   ],
   "require": {
-    "php": ">=5.4",
+    "php": ">=5.5",
     "ramsey/uuid": "^3.7",
     "songshenzong/http-client": "^1.0"
   },
