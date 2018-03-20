@@ -3,7 +3,6 @@
 namespace Songshenzong\Siren;
 
 use Songshenzong\Siren\Traits\PacketTrait;
-use function microtime;
 
 /**
  * Class Packet

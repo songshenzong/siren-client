@@ -2,11 +2,6 @@
 
 namespace Songshenzong\Siren;
 
-use const SIREN_MAX_MODULE_LENGTH;
-use const SIREN_MAX_MSG_LENGTH;
-use const SIREN_MAX_SUBMODULE_LENGTH;
-
-
 /**
  * Class UdpProtocol
  *

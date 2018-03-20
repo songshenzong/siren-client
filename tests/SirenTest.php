@@ -5,7 +5,6 @@ namespace Songshenzong\Siren\Test;
 use PHPUnit\Framework\TestCase;
 use Songshenzong\Siren\Siren;
 
-
 class SirenTest extends TestCase
 {
 

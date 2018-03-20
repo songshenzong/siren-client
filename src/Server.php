@@ -1,13 +1,6 @@
 <?php
 
-
 namespace Songshenzong\Siren;
-
-
-use function dump;
-use function str_replace;
-use function trim;
-use function var_dump;
 
 class Server
 {

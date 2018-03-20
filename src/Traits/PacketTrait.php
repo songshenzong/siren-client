@@ -2,8 +2,6 @@
 
 namespace Songshenzong\Siren\Traits;
 
-use function json_encode;
-
 /**
  * Trait PacketTrait
  *
@@ -82,7 +80,7 @@ trait PacketTrait
      */
     public function __toString()
     {
-        return json_encode($this, JSON_UNESCAPED_UNICODE);
+        return \json_encode($this, JSON_UNESCAPED_UNICODE);
     }
 }
 

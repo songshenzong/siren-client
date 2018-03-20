@@ -6,10 +6,6 @@ use Exception;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Uuid;
 use Songshenzong\HttpClient\HttpClient;
-use const SIREN_PROTOCOL_HTTP;
-use const SIREN_PROTOCOL_TCP;
-use const SIREN_PROTOCOL_UDP;
-use function strtoupper;
 
 /**
  * Class Siren
@@ -158,14 +154,13 @@ class Siren
      */
     protected static function reportTcp(Packet $packet)
     {
-        $server = self::getServer('tcp');
+        $server  = self::getServer('tcp');
         $socket  = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         $connect = socket_connect($socket, $server->host, $server->port);
         if (!$connect) {
             socket_close($socket);
             return false;
         }
-
 
         socket_write($socket, $packet, strlen($packet));
         socket_shutdown($socket);
