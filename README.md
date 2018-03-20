@@ -87,7 +87,7 @@ Siren::tick('moduleName', 'submoduleName');
 if (YourClass::action()) {
   Siren::success('moduleName', 'submoduleName');
 } else {
-  Siren::error('moduleName', 'submoduleName', 500, 'Something wrong');
+  Siren::error('moduleName', 'submoduleName', 'Something wrong');
 }
  
  
