@@ -76,6 +76,11 @@ trait PacketTrait
     public $time;
 
     /**
+     * @var array
+     */
+    public $data = [];
+
+    /**
      * @return string
      */
     public function __toString()

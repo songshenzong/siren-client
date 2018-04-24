@@ -171,7 +171,7 @@ class Siren
 
 
     /**
-     * @param \Songshenzong\Siren\Packet $packet
+     * @param Packet $packet
      *
      * @return bool
      */
@@ -195,7 +195,7 @@ class Siren
      */
     protected static function getServer($protocol = 'udp')
     {
-        $servers = Siren::getConfig('servers');
+        $servers = self::getConfig('servers');
         if (!$servers) {
             die('Servers Not Found');
         }
@@ -244,14 +244,15 @@ class Siren
 
 
     /**
-     * @param   string $module
-     * @param   string $submodule
-     * @param   string $message
-     * @param   int    $alert
+     * @param       $module
+     * @param       $submodule
+     * @param       $message
+     * @param int   $alert
+     * @param array $data
      *
      * @return bool
      */
-    public static function error($module, $submodule, $message, $alert = SIREN_ALERT_ALWAYS)
+    public static function error($module, $submodule, $message, $alert = SIREN_ALERT_ALWAYS, array $data = [])
     {
         if (self::$backtrace === null) {
             self::$backtrace = debug_backtrace();
@@ -265,6 +266,7 @@ class Siren
         $packet->type      = SIREN_TYPE_ERROR;
         $packet->msg       = $message;
         $packet->alert     = $alert;
+        $packet->data      = $data;
 
         return self::report($packet);
     }
@@ -298,23 +300,21 @@ class Siren
         $packet->type      = SIREN_TYPE_ERROR;
         $packet->msg       = $exception->getMessage();
         $packet->alert     = $alert;
+        $packet->data      = $exception->getTrace();
 
         return self::report($packet);
     }
 
 
     /**
-     * Report Log
-     *
-     * 上报日志
-     *
-     * @param $module
-     * @param $submodule
-     * @param $message
+     * @param       $module
+     * @param       $submodule
+     * @param       $message
+     * @param array $data
      *
      * @return bool
      */
-    public static function log($module, $submodule, $message)
+    public static function log($module, $submodule, $message, array $data = [])
     {
         $packet            = new Packet();
         $packet->module    = $module;
@@ -322,23 +322,21 @@ class Siren
         $packet->type      = SIREN_TYPE_LOG;
         $packet->msg       = $message;
         $packet->alert     = -1;
+        $packet->data      = $data;
 
         return self::report($packet);
     }
 
 
     /**
-     * Report Notice
-     *
-     * 上报通知（记录日志）
-     *
-     * @param $module
-     * @param $submodule
-     * @param $message
+     * @param       $module
+     * @param       $submodule
+     * @param       $message
+     * @param array $data
      *
      * @return bool
      */
-    public static function notice($module, $submodule, $message)
+    public static function notice($module, $submodule, $message, array $data = [])
     {
         $packet            = new Packet();
         $packet->module    = $module;
@@ -346,7 +344,7 @@ class Siren
         $packet->type      = SIREN_TYPE_NOTICE;
         $packet->msg       = $message;
         $packet->alert     = 0;
-
+        $packet->data      = $data;
         return self::report($packet);
     }
 
