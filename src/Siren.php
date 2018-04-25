@@ -273,6 +273,95 @@ class Siren
 
 
     /**
+     * Warning、Notice
+     *
+     * @param callable $function
+     */
+    public static function set_error_handler(callable $function)
+    {
+        set_error_handler(function () use ($function) {
+            $error             = \func_get_args();
+            $packet            = new Packet();
+            $packet->module    = 'set_error_handler';
+            $packet->submodule = $error[0];
+            $packet->msg       = $error[1];
+            $packet->file      = $error[2];
+            $packet->line      = $error[3];
+            $packet->data      = $error[4];
+            $packet->type      = SIREN_TYPE_ERROR;
+            $packet->alert     = SIREN_ALERT_ALWAYS;
+
+            self::report($packet);
+
+            $function(...func_get_args());
+        });
+    }
+
+
+    /**
+     * Fatal Error、Parse Error
+     *
+     * @param callable $function
+     */
+    public static function register_shutdown_function(callable $function)
+    {
+        register_shutdown_function(function () use ($function) {
+
+            $error = \error_get_last();
+
+            if ($error['message']) {
+                $packet            = new Packet();
+                $packet->module    = 'register_shutdown_function';
+                $packet->submodule = isset($error['type']) ? $error['type'] : 'register_shutdown_function';
+                $packet->msg       = $error['message'];
+                $packet->file      = $error['file'];
+                $packet->line      = $error['line'];
+                $packet->data      = $error;
+                $packet->type      = SIREN_TYPE_ERROR;
+                $packet->alert     = SIREN_ALERT_ALWAYS;
+
+                self::report($packet);
+            }
+
+
+            $function(...func_get_args());
+        });
+
+
+    }
+
+
+    /**
+     * set_exception_handler
+     *
+     * @param callable $function
+     */
+    public static function set_exception_handler(callable $function)
+    {
+
+        set_exception_handler(function ($exception) use ($function) {
+            /**
+             * @var Exception $exception
+             */
+            $packet            = new Packet();
+            $packet->module    = 'set_exception_handler';
+            $packet->submodule = get_class($exception);
+            $packet->msg       = $exception->getMessage();
+            $packet->file      = $exception->getFile();
+            $packet->line      = $exception->getLine();
+            $packet->data      = $exception->getTrace();
+            $packet->type      = SIREN_TYPE_ERROR;
+            $packet->alert     = SIREN_ALERT_ALWAYS;
+
+            self::report($packet);
+
+            $function($exception);
+        });
+
+
+    }
+
+    /**
      * @param array $backtrace
      */
     protected static function setBacktrace(array $backtrace)
